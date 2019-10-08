@@ -16,6 +16,9 @@ namespace Contracts
 
         ITbassuranceRepository Tbassurance { get; }
 
+
+        ITbagentRepository Tbagent { get; }
+
         ITbcarosserieRepository Tbcarosserie { get; }
 
         ITbcommuneRepository Tbcommune { get; }

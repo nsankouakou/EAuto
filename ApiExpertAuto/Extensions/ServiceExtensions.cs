@@ -23,20 +23,16 @@ namespace ApiExpertAuto
         public static void ConfigureSqlServerContext(this IServiceCollection services, IConfiguration Configuration)
         {
             var connection = Configuration.GetSection("ConnectionStrings").GetSection("DefaultConnection").Value;
-            services.AddDbContext<DbExpertAutoContext>(options => options.UseSqlServer(connection)/*, ServiceLifetime.Transient*/);
+            services.AddDbContext<DbExpertAutoContext>(options => options.UseSqlServer(connection));
         }
 
-        //public static void ConfigureSqlServerMikidiaContext(this IServiceCollection services, IConfiguration Configuration)
-        //{
-        //    var connection = Configuration.GetSection("ConnectionStrings").GetSection("MikidiaConnection").Value;
-        //    services.AddDbContext<EPT_MIKIDIAContext>(options => options.UseSqlServer(connection)/*, ServiceLifetime.Singleton*/);
-        //}
+       
 
         public static void SwaggerGen(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "BRANCHEMENT ABONNE  API V1", Version = "v1" });
+                c.SwaggerDoc("v1", new Info { Title = "Expert Auto  API V1", Version = "v1" });
             });
         }
 
@@ -72,7 +68,7 @@ namespace ApiExpertAuto
             //services.AddTransient<IDemandeCreatService, DemandeCreatService>();
             //services.AddTransient<ILoginService, LoginService>();
             //services.AddTransient<IChargementParametreService, ChargementParametreService>();            
-            //services.AddTransient<IServiceCommun, ServiceCommun>();
+            services.AddTransient<ICommunServices, CommunServices>();
             //services.AddTransient<ISynchronisationService, SynchronisationService>();
         }
     }

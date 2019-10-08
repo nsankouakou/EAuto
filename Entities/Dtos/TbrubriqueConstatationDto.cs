@@ -31,13 +31,13 @@ namespace Entities.Models.Dtos
         {
             return new TbrubriqueConstatationDto()
             {
-                IdRubConst = model.IdRubConst, 
-                LibRubConst = model.LibRubConst, 
-                IdUser = model.IdUser, 
-                DateCreation = model.DateCreation, 
-                ModifieLe = model.ModifieLe, 
-                ModifiePar = model.ModifiePar, 
-                StateCode = model.StateCode, 
+                IdRubConst = model.IdRubConst,
+                LibRubConst = model.LibRubConst,
+                IdUser = model.IdUser,
+                DateCreation = model.DateCreation,
+                ModifieLe = model.ModifieLe,
+                ModifiePar = model.ModifiePar,
+                StateCode = model.StateCode,
                 StatusCode = model.StatusCode, 
                 TbexpertiseRubriqueConstatationPointChoc = model.TbexpertiseRubriqueConstatationPointChoc, 
             }; 

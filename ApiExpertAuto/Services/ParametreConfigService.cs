@@ -24,8 +24,7 @@ namespace ApiExpertAuto.Services
             _commun = communService;
         }
 
-        #region Assurance
-        //Récupération des assurances
+        #region Tbassurance
 
         public async Task<ObjetRetour> GetChargAllTbassurance(string token = "")
         {
@@ -36,7 +35,7 @@ namespace ApiExpertAuto.Services
                 {
 
                     var datas = await _service.Tbassurance.FindByConditionAync(m => m.StateCode == (int)StateCode.Actif);
-                    retour.Contenu = datas.Select(d => new ObjetParamModel { Id = d.IdAssur, ValueType = d.NomAssur, CodeStr = d.SiglAssur });
+                    retour.Contenu = datas.Select(d => new ObjetParamModel { Id = d.IdAssur, ValueType = d.NomAssur, CodeStr=d.SiglAssur });
                     retour.Etat = true;
                     _logger.LogInfo($"SUCCESS");
                 }
@@ -58,126 +57,26 @@ namespace ApiExpertAuto.Services
 
         }
 
-        public async Task<ObjetRetour> getAllAssurance(string token)
-        {
-            ObjetRetour retour = new ObjetRetour();
-            try
-            {
-
-                if (_commun.ConnexionValide(token) == 1)
-                {
-                    retour.Contenu = await _service.Tbassurance.FindAllAsync();
-                    retour.Etat = true;
-                    _logger.LogInfo("Liste des assurances récupérée avec succès. ");
-                }
-            }
-            catch (Exception ex)
-            {
-                retour.Etat = false;
-                retour.Message = ex.Message;
-                _logger.LogError(ex.ToString());
-            }
-            return retour;
-        }
-
-        public async Task<ObjetRetour> getSingleAssurance(string token, int id)
-        {
-            ObjetRetour retour = new ObjetRetour();
-            try
-            {
-
-                if (_commun.ConnexionValide(token) == 1)
-                {
-                    retour.Contenu = await _service.Tbassurance.FindByConditionAync(x => x.IdAssur == id) ;
-                    retour.Etat = true;
-                    _logger.LogInfo("Assurances récupérée avec succès. ");
-                }
-            }
-            catch (Exception ex)
-            {
-                retour.Etat = false;
-                retour.Message = ex.Message;
-                _logger.LogError(ex.ToString());
-            }
-            return retour;
-        }
-
-        public async Task<ObjetRetour> setSingleAssurance(string token, TbassuranceDto  assurance)
-        {
-            ObjetRetour retour = new ObjetRetour();
-            try
-            {
-
-                if (_commun.ConnexionValide(token) == 1)
-                {
-                   await _service.Tbassurance.CreateAsync(assurance.ToModel());
-                    retour.Etat = true;
-                    _logger.LogInfo("Assurances récupérée avec succès. ");
-                }
-            }
-            catch (Exception ex)
-            {
-                retour.Etat = false;
-                retour.Message = ex.Message;
-                _logger.LogError(ex.ToString());
-            }
-            return retour;
-        }
-        #endregion
-
-        #region Tbville
-
-        public async Task<ObjetRetour> GetChargAllTbville(string token = "")
+        public ObjetRetour GetAllTbassurance(string token = "")
         {
             var retour = new ObjetRetour();
             try
             {
                 if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
                 {
+                    var datas = _service.Tbassurance.FindAll().ToList();
 
-                    var datas = await _service.Tbville.FindByConditionAync(m => m.StateCode == (int)StateCode.Actif);
-                    retour.Contenu = datas.Select(d => new ObjetParamModel { Id = d.IdVille, ValueType = d.NomVille, Code = d.Distance });
-                    retour.Etat = true;
-                    _logger.LogInfo($"SUCCESS");
-                }
-                else
-                {
-                    retour.Message = $"Token non valide!";
-                    retour.Etat = false;
-                    _logger.LogInfo($"Token non valide!");
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                retour.Etat = false;
-                retour.Message = ex.Message;
-            }
+                    var lstTbassuranceDtos = new List<TbassuranceDto>();
 
-            return retour;
-
-        }
-
-        public ObjetRetour GetAllTbville(string token = "")
-        {
-            var retour = new ObjetRetour();
-            try
-            {
-                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
-                {
-                    var datas =  _service.Tbville.FindAll().ToList();
-
-                    var lstTbvilleDtos = new List<TbvilleDto>();
-                    
                     foreach (var item in datas)
                     {
-                        lstTbvilleDtos.Add(TbvilleDto.FromModel(item));
+                        lstTbassuranceDtos.Add(TbassuranceDto.FromModel(item));
                     }
-                    retour.Contenu = lstTbvilleDtos;
-                    
+                    retour.Contenu = lstTbassuranceDtos;
+
 
                     retour.Etat = true;
-                    _logger.LogInfo($"SUCCESS SELECT Tbville");
+                    _logger.LogInfo($"SUCCESS SELECT Tbassurance");
                 }
                 else
                 {
@@ -197,7 +96,7 @@ namespace ApiExpertAuto.Services
 
         }
 
-        public async Task<ObjetRetour> GetTbville(decimal id, string token = "")
+        public async Task<ObjetRetour> GetTbassurance(decimal id, string token = "")
         {
             var retour = new ObjetRetour();
             try
@@ -205,9 +104,9 @@ namespace ApiExpertAuto.Services
 
                 if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
                 {
-                    retour.Contenu = await _service.Tbville.FindByConditionAync(a => a.IdVille == id);
+                    retour.Contenu = await _service.Tbassurance.FindByConditionAync(a => a.IdAssur == id);
                     retour.Etat = true;
-                    _logger.LogInfo($"SUCCESS SELECT Tbville");
+                    _logger.LogInfo($"SUCCESS SELECT Tbassurance");
                 }
                 else
                 {
@@ -227,18 +126,17 @@ namespace ApiExpertAuto.Services
             return retour;
         }
 
-
-        public async Task<ObjetRetour> InsertTbville(TbvilleDto value)
+        public async Task<ObjetRetour> InsertTbassurance(TbassuranceDto value)
         {
             var retour = new ObjetRetour();
             try
             {
                 if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
                 {
-                    await _service.Tbville.CreateAsync(value.ToModel());
+                    await _service.Tbassurance.CreateAsync(value.ToModel());
                     _service.Save();
                     retour.Etat = true;
-                    _logger.LogInfo($"SUCCESS INSERTION Tbville :\n  {value.ToString()}");
+                    _logger.LogInfo($"SUCCESS INSERTION Tbassurance :\n  {value.ToString()}");
                 }
                 else
                 {
@@ -257,25 +155,34 @@ namespace ApiExpertAuto.Services
             return retour;
         }
 
-
-        public ObjetRetour MajTbville(TbvilleDto value)
+        public ObjetRetour MajTbassurance(TbassuranceDto value)
         {
             var retour = new ObjetRetour();
             try
             {
                 if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
                 {
-                    var data = _service.Tbville.FindByCondition(v => v.IdVille == value.IdVille).FirstOrDefault();
-                    data.ModifieLe = value.ModifieLe;
-                    data.Distance = value.Distance;
-                    data.ModifiePar = value.ModifiePar;
-                    data.NomVille = value.NomVille;
-                    data.StateCode = value.StateCode;
+                    var data = _service.Tbassurance.FindByCondition(v => v.IdAssur == value.IdAssur).FirstOrDefault();
+                    data.IdAssur = value.IdAssur; data. 
+                NomAssur = value.NomAssur; data. 
+                TelAssur = value.TelAssur; data. 
+                AdrAssur = value.AdrAssur; data. 
+                BpAssur = value.BpAssur; data. 
+                MailAssur = value.MailAssur; data. 
+                FaxAssur = value.FaxAssur; data. 
+                Contact = value.Contact; data. 
+                SiglAssur = value.SiglAssur; data. 
+                IdUser = value.IdUser;  
+                data. 
+                ModifieLe = value.ModifieLe; data. 
+                ModifiePar = value.ModifiePar; data. 
+                StateCode = value.StateCode; data. 
+                StatusCode = value.StatusCode;
 
-                    _service.Tbville.Update(data);
+                    _service.Tbassurance.Update(data);
                     _service.Save();
                     retour.Etat = true;
-                    _logger.LogInfo($"SUCCESS UPDATE Tbville :\n  {value.ToString()}");
+                    _logger.LogInfo($"SUCCESS UPDATE Tbassurance :\n  {value.ToString()}");
                 }
                 else
                 {
@@ -294,18 +201,17 @@ namespace ApiExpertAuto.Services
             return retour;
         }
 
-
-        public ObjetRetour DeleteTbville(TbvilleDto value)
+        public ObjetRetour DeleteTbassurance(TbassuranceDto value)
         {
             var retour = new ObjetRetour();
             try
             {
                 if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
                 {
-                    _service.Tbville.Delete(value.ToModel());
+                    _service.Tbassurance.Delete(value.ToModel());
                     _service.Save();
                     retour.Etat = true;
-                    _logger.LogInfo($"SUCCESS SUPPRESSION Tbville :\n  {value.ToString()}");
+                    _logger.LogInfo($"SUCCESS SUPPRESSION Tbassurance :\n  {value.ToString()}");
                 }
                 else
                 {
@@ -325,6 +231,3175 @@ namespace ApiExpertAuto.Services
         }
 
         #endregion
+
+        #region Tbagent
+
+
+        public ObjetRetour GetAllTbagent(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    var datas = _service.Tbagent.FindAll().ToList();
+
+                    var lstTbagentDtos = new List<TbagentDto>();
+
+                    foreach (var item in datas)
+                    {
+                        lstTbagentDtos.Add(TbagentDto.FromModel(item));
+                    }
+                    retour.Contenu = lstTbagentDtos;
+
+
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT Tbagent");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public async Task<ObjetRetour> GetTbagent(decimal id, string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    retour.Contenu = await _service.Tbagent.FindByConditionAync(a => a.AgentId == id);
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT Tbagent");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+
+            return retour;
+        }
+
+        public async Task<ObjetRetour> InsertTbagent(TbagentDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    await _service.Tbagent.CreateAsync(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS INSERTION Tbagent :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return retour;
+        }
+
+        public ObjetRetour MajTbagent(TbagentDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    var data = _service.Tbagent.FindByCondition(v => v.AgentId == value.AgentId).FirstOrDefault();
+                    data.AgentId = value.AgentId; data. 
+                Matricule = value.Matricule; data. 
+                Nom = value.Nom; data. 
+                Prenoms = value.Prenoms; data. 
+                Password = value.Password; data. 
+                Categorie = value.Categorie; data. 
+                Telephone = value.Telephone; data. 
+                Lettreaffectee = value.Lettreaffectee; data. 
+                Fonctionid = value.Fonctionid; data. 
+                IdUser = value.IdUser; data. 
+                ModifieLe = value.ModifieLe; data. 
+                ModifiePar = value.ModifiePar; data. 
+                StateCode = value.StateCode; data. 
+                StatusCode = value.StatusCode;
+
+                    _service.Tbagent.Update(data);
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS UPDATE Tbagent :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        public ObjetRetour DeleteTbagent(TbagentDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    _service.Tbagent.Delete(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SUPPRESSION Tbagent :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        #endregion
+
+        #region TbautreRubrique
+
+        public async Task<ObjetRetour> GetChargAllTbautreRubrique(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+
+                    var datas = await _service.TbautreRubrique.FindByConditionAync(m => m.StateCode == (int)StateCode.Actif);
+                    retour.Contenu = datas.Select(d => new ObjetParamModel { Id = d.IdAutreRub, ValueType = d.LibAutreRub });
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public ObjetRetour GetAllTbautreRubrique(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    var datas = _service.TbautreRubrique.FindAll().ToList();
+
+                    var lstTbautreRubriqueDtos = new List<TbautreRubriqueDto>();
+
+                    foreach (var item in datas)
+                    {
+                        lstTbautreRubriqueDtos.Add(TbautreRubriqueDto.FromModel(item));
+                    }
+                    retour.Contenu = lstTbautreRubriqueDtos;
+
+
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT TbautreRubrique");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public async Task<ObjetRetour> GetTbautreRubrique(decimal id, string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    retour.Contenu = await _service.TbautreRubrique.FindByConditionAync(a => a.IdAutreRub == id);
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT TbautreRubrique");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+
+            return retour;
+        }
+
+        public async Task<ObjetRetour> InsertTbautreRubrique(TbautreRubriqueDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    await _service.TbautreRubrique.CreateAsync(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS INSERTION TbautreRubrique :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return retour;
+        }
+
+        public ObjetRetour MajTbautreRubrique(TbautreRubriqueDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    var data = _service.TbautreRubrique.FindByCondition(v => v.IdAutreRub == value.IdAutreRub).FirstOrDefault();
+                    data.IdAutreRub = value.IdAutreRub; data. 
+                LibAutreRub = value.LibAutreRub; data. 
+                IdUser = value.IdUser;  data. 
+                ModifieLe = value.ModifieLe; data. 
+                ModifiePar = value.ModifiePar; data. 
+                StateCode = value.StateCode; data. 
+                StatusCode = value.StatusCode;
+
+                    _service.TbautreRubrique.Update(data);
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS UPDATE TbautreRubrique :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        public ObjetRetour DeleteTbautreRubrique(TbautreRubriqueDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    _service.TbautreRubrique.Delete(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SUPPRESSION TbautreRubrique :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        #endregion
+
+        #region Tbcarosserie
+
+        public async Task<ObjetRetour> GetChargAllTbcarosserie(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+
+                    var datas = await _service.Tbcarosserie.FindByConditionAync(m => m.StateCode == (int)StateCode.Actif);
+                    retour.Contenu = datas.Select(d => new ObjetParamModel { Id = d.Idcarross, ValueType = d.LibCarross});
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public ObjetRetour GetAllTbcarosserie(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    var datas = _service.Tbcarosserie.FindAll().ToList();
+
+                    var lstTbcarosserieDtos = new List<TbcarosserieDto>();
+
+                    foreach (var item in datas)
+                    {
+                        lstTbcarosserieDtos.Add(TbcarosserieDto.FromModel(item));
+                    }
+                    retour.Contenu = lstTbcarosserieDtos;
+
+
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT Tbcarosserie");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public async Task<ObjetRetour> GetTbcarosserie(decimal id, string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    retour.Contenu = await _service.Tbcarosserie.FindByConditionAync(a => a.Idcarross == id);
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT Tbcarosserie");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+
+            return retour;
+        }
+
+        public async Task<ObjetRetour> InsertTbcarosserie(TbcarosserieDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    await _service.Tbcarosserie.CreateAsync(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS INSERTION Tbcarosserie :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return retour;
+        }
+
+        public ObjetRetour MajTbcarosserie(TbcarosserieDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    var data = _service.Tbcarosserie.FindByCondition(v => v.Idcarross == value.Idcarross).FirstOrDefault();
+                    data.Idcarross = value.Idcarross; data. 
+                LibCarross = value.LibCarross; data. 
+                IdUser = value.IdUser; data. 
+                ModifieLe = value.ModifieLe; data. 
+                ModifiePar = value.ModifiePar; data. 
+                StateCode = value.StateCode; data. 
+                StatusCode = value.StatusCode;
+
+                    _service.Tbcarosserie.Update(data);
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS UPDATE Tbcarosserie :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        public ObjetRetour DeleteTbcarosserie(TbcarosserieDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    _service.Tbcarosserie.Delete(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SUPPRESSION Tbcarosserie :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        #endregion
+
+        #region Tbcommune
+
+        public async Task<ObjetRetour> GetChargAllTbcommune(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+
+                    var datas = await _service.Tbcommune.FindByConditionAync(m => m.StateCode == (int)StateCode.Actif);
+                    retour.Contenu = datas.Select(d => new ObjetParamModel { Id = d.IdComm, ValueType = d.NomComm });
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public ObjetRetour GetAllTbcommune(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    var datas = _service.Tbcommune.FindAll().ToList();
+
+                    var lstTbcommuneDtos = new List<TbcommuneDto>();
+
+                    foreach (var item in datas)
+                    {
+                        lstTbcommuneDtos.Add(TbcommuneDto.FromModel(item));
+                    }
+                    retour.Contenu = lstTbcommuneDtos;
+
+
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT Tbcommune");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public async Task<ObjetRetour> GetTbcommune(decimal id, string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    retour.Contenu = await _service.Tbcommune.FindByConditionAync(a => a.IdComm == id);
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT Tbcommune");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+
+            return retour;
+        }
+
+        public async Task<ObjetRetour> InsertTbcommune(TbcommuneDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    await _service.Tbcommune.CreateAsync(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS INSERTION Tbcommune :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return retour;
+        }
+
+        public ObjetRetour MajTbcommune(TbcommuneDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    var data = _service.Tbcommune.FindByCondition(v => v.IdVille == value.IdVille).FirstOrDefault();
+                    data.IdComm = value.IdComm; data. 
+                NomComm = value.NomComm; data. 
+                Deplacement = value.Deplacement; data. 
+                IdVille = value.IdVille; data. 
+                IdUser = value.IdUser;  data. 
+                ModifieLe = value.ModifieLe; data. 
+                ModifiePar = value.ModifiePar; data. 
+                StateCode = value.StateCode; data. 
+                StatusCode = value.StatusCode;
+
+                    _service.Tbcommune.Update(data);
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS UPDATE Tbcommune :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        public ObjetRetour DeleteTbcommune(TbcommuneDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    _service.Tbcommune.Delete(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SUPPRESSION Tbcommune :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        #endregion
+
+        #region Tbcouleur
+
+        public async Task<ObjetRetour> GetChargAllTbcouleur(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+
+                    var datas = await _service.Tbcouleur.FindByConditionAync(m => m.StateCode == (int)StateCode.Actif);
+                    retour.Contenu = datas.Select(d => new ObjetParamModel { Id = d.IdCouleur, ValueType = d.LibCouleur });
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public ObjetRetour GetAllTbcouleur(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    var datas = _service.Tbcouleur.FindAll().ToList();
+
+                    var lstTbcouleurDtos = new List<TbcouleurDto>();
+
+                    foreach (var item in datas)
+                    {
+                        lstTbcouleurDtos.Add(TbcouleurDto.FromModel(item));
+                    }
+                    retour.Contenu = lstTbcouleurDtos;
+
+
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT Tbcouleur");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public async Task<ObjetRetour> GetTbcouleur(decimal id, string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    retour.Contenu = await _service.Tbcouleur.FindByConditionAync(a => a.IdCouleur == id);
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT Tbcouleur");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+
+            return retour;
+        }
+
+        public async Task<ObjetRetour> InsertTbcouleur(TbcouleurDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    await _service.Tbcouleur.CreateAsync(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS INSERTION Tbcouleur :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return retour;
+        }
+
+        public ObjetRetour MajTbcouleur(TbcouleurDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    var data = _service.Tbcouleur.FindByCondition(v => v.IdCouleur == value.IdCouleur).FirstOrDefault();
+                    data.IdCouleur = value.IdCouleur; data. 
+                LibCouleur = value.LibCouleur; data. 
+                IdUser = value.IdUser; data. 
+                DateCreation = value.DateCreation; data. 
+                ModifieLe = value.ModifieLe; data. 
+                ModifiePar = value.ModifiePar; data. 
+                StateCode = value.StateCode; data. 
+                StatusCode = value.StatusCode;
+
+                    _service.Tbcouleur.Update(data);
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS UPDATE Tbcouleur :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        public ObjetRetour DeleteTbcouleur(TbcouleurDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    _service.Tbcouleur.Delete(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SUPPRESSION Tbcouleur :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        #endregion
+
+
+
+        #region Tbenergie
+
+        public async Task<ObjetRetour> GetChargAllTbenergie(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+
+                    var datas = await _service.Tbenergie.FindByConditionAync(m => m.StateCode == (int)StateCode.Actif);
+                    retour.Contenu = datas.Select(d => new ObjetParamModel { Id = d.IdEnergie, ValueType = d.LibEnergie});
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public ObjetRetour GetAllTbenergie(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    var datas = _service.Tbenergie.FindAll().ToList();
+
+                    var lstTbenergieDtos = new List<TbenergieDto>();
+
+                    foreach (var item in datas)
+                    {
+                        lstTbenergieDtos.Add(TbenergieDto.FromModel(item));
+                    }
+                    retour.Contenu = lstTbenergieDtos;
+
+
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT Tbenergie");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public async Task<ObjetRetour> GetTbenergie(decimal id, string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    retour.Contenu = await _service.Tbenergie.FindByConditionAync(a => a.IdEnergie == id);
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT Tbenergie");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+
+            return retour;
+        }
+
+        public async Task<ObjetRetour> InsertTbenergie(TbenergieDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    await _service.Tbenergie.CreateAsync(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS INSERTION Tbenergie :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return retour;
+        }
+
+        public ObjetRetour MajTbenergie(TbenergieDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    var data = _service.Tbenergie.FindByCondition(v => v.IdEnergie == value.IdEnergie).FirstOrDefault();
+                    data.IdEnergie = value.IdEnergie; data. 
+                LibEnergie = value.LibEnergie; data. 
+                IdUser = value.IdUser;  data. 
+                ModifieLe = value.ModifieLe; data. 
+                ModifiePar = value.ModifiePar; data. 
+                StateCode = value.StateCode; data. 
+                StatusCode = value.StatusCode;
+
+                    _service.Tbenergie.Update(data);
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS UPDATE Tbenergie :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        public ObjetRetour DeleteTbenergie(TbenergieDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    _service.Tbenergie.Delete(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SUPPRESSION Tbenergie :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        #endregion
+
+        #region Tbfourniture
+
+        public async Task<ObjetRetour> GetChargAllTbfourniture(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+
+                    var datas = await _service.Tbfourniture.FindByConditionAync(m => m.StateCode == (int)StateCode.Actif);
+                    retour.Contenu = datas.Select(d => new ObjetParamModel { Id = d.IdFourn, ValueType = d.LibFourn});
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public ObjetRetour GetAllTbfourniture(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    var datas = _service.Tbfourniture.FindAll().ToList();
+
+                    var lstTbfournitureDtos = new List<TbfournitureDto>();
+
+                    foreach (var item in datas)
+                    {
+                        lstTbfournitureDtos.Add(TbfournitureDto.FromModel(item));
+                    }
+                    retour.Contenu = lstTbfournitureDtos;
+
+
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT Tbfourniture");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public async Task<ObjetRetour> GetTbfourniture(decimal id, string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    retour.Contenu = await _service.Tbfourniture.FindByConditionAync(a => a.IdFourn == id);
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT Tbfourniture");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+
+            return retour;
+        }
+
+        public async Task<ObjetRetour> InsertTbfourniture(TbfournitureDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    await _service.Tbfourniture.CreateAsync(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS INSERTION Tbfourniture :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return retour;
+        }
+
+        public ObjetRetour MajTbfourniture(TbfournitureDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    var data = _service.Tbfourniture.FindByCondition(v => v.IdFourn == value.IdFourn).FirstOrDefault();
+                    data.IdFourn = value.IdFourn; data. 
+                LibFourn = value.LibFourn; data. 
+                IdUser = value.IdUser;  data. 
+                ModifieLe = value.ModifieLe; data. 
+                ModifiePar = value.ModifiePar; data. 
+                StateCode = value.StateCode; data. 
+                StatusCode = value.StatusCode;
+
+                    _service.Tbfourniture.Update(data);
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS UPDATE Tbfourniture :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        public ObjetRetour DeleteTbfourniture(TbfournitureDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    _service.Tbfourniture.Delete(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SUPPRESSION Tbfourniture :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        #endregion
+
+
+
+
+        #region TbpointChoc
+
+        public async Task<ObjetRetour> GetChargAllTbpointChoc(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+
+                    var datas = await _service.TbpointChoc.FindByConditionAync(m => m.StateCode == (int)StateCode.Actif);
+                    retour.Contenu = datas.Select(d => new ObjetParamModel { Id = d.IdPointChoc, ValueType = d.LibPointChoc});
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public ObjetRetour GetAllTbpointChoc(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    var datas = _service.TbpointChoc.FindAll().ToList();
+
+                    var lstTbpointChocDtos = new List<TbpointChocDto>();
+
+                    foreach (var item in datas)
+                    {
+                        lstTbpointChocDtos.Add(TbpointChocDto.FromModel(item));
+                    }
+                    retour.Contenu = lstTbpointChocDtos;
+
+
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT TbpointChoc");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public async Task<ObjetRetour> GetTbpointChoc(decimal id, string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    retour.Contenu = await _service.TbpointChoc.FindByConditionAync(a => a.IdPointChoc == id);
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT TbpointChoc");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+
+            return retour;
+        }
+
+        public async Task<ObjetRetour> InsertTbpointChoc(TbpointChocDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    await _service.TbpointChoc.CreateAsync(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS INSERTION TbpointChoc :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return retour;
+        }
+
+        public ObjetRetour MajTbpointChoc(TbpointChocDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    var data = _service.TbpointChoc.FindByCondition(v => v.IdPointChoc == value.IdPointChoc).FirstOrDefault();
+                    data.IdPointChoc = value.IdPointChoc; data. 
+                LibPointChoc = value.LibPointChoc; data. 
+                IdUser = value.IdUser;  data. 
+                ModifieLe = value.ModifieLe; data. 
+                ModifiePar = value.ModifiePar; data. 
+                StateCode = value.StateCode; data. 
+                StatusCode = value.StatusCode;
+
+                    _service.TbpointChoc.Update(data);
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS UPDATE TbpointChoc :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        public ObjetRetour DeleteTbpointChoc(TbpointChocDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    _service.TbpointChoc.Delete(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SUPPRESSION TbpointChoc :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        #endregion
+
+        #region Tbproprietaire
+
+
+        public ObjetRetour GetAllTbproprietaire(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    var datas = _service.Tbproprietaire.FindAll().ToList();
+
+                    var lstTbproprietaireDtos = new List<TbproprietaireDto>();
+
+                    foreach (var item in datas)
+                    {
+                        lstTbproprietaireDtos.Add(TbproprietaireDto.FromModel(item));
+                    }
+                    retour.Contenu = lstTbproprietaireDtos;
+
+
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT Tbproprietaire");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public async Task<ObjetRetour> GetTbproprietaire(decimal id, string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    retour.Contenu = await _service.Tbproprietaire.FindByConditionAync(a => a.IdProprio == id);
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT Tbproprietaire");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+
+            return retour;
+        }
+
+        public async Task<ObjetRetour> InsertTbproprietaire(TbproprietaireDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    await _service.Tbproprietaire.CreateAsync(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS INSERTION Tbproprietaire :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return retour;
+        }
+
+        public ObjetRetour MajTbproprietaire(TbproprietaireDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    var data = _service.Tbproprietaire.FindByCondition(v => v.IdProprio == value.IdProprio).FirstOrDefault();
+                    data.IdProprio = value.IdProprio; data. 
+                NomProprio = value.NomProprio; data. 
+                PrenProPrio = value.PrenProPrio; data. 
+                TelProprio = value.TelProprio; data. 
+                AdrProprio = value.AdrProprio; data. 
+                BpProprio = value.BpProprio; data. 
+                MailProrio = value.MailProrio; data. 
+                FaxProprio = value.FaxProprio; data. 
+                DatEnreg = value.DatEnreg; data. 
+                IdUser = value.IdUser;  data. 
+                ModifieLe = value.ModifieLe; data. 
+                ModifiePar = value.ModifiePar; data. 
+                StateCode = value.StateCode; data. 
+                StatusCode = value.StatusCode;
+
+                    _service.Tbproprietaire.Update(data);
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS UPDATE Tbproprietaire :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        public ObjetRetour DeleteTbproprietaire(TbproprietaireDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    _service.Tbproprietaire.Delete(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SUPPRESSION Tbproprietaire :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        #endregion
+
+        #region TbrubriqueConstatation
+
+        public async Task<ObjetRetour> GetChargAllTbrubriqueConstatation(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+
+                    var datas = await _service.TbrubriqueConstatation.FindByConditionAync(m => m.StateCode == (int)StateCode.Actif);
+                    retour.Contenu = datas.Select(d => new ObjetParamModel { Id = d.IdRubConst, ValueType = d.LibRubConst});
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public ObjetRetour GetAllTbrubriqueConstatation(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    var datas = _service.TbrubriqueConstatation.FindAll().ToList();
+
+                    var lstTbrubriqueConstatationDtos = new List<TbrubriqueConstatationDto>();
+
+                    foreach (var item in datas)
+                    {
+                        lstTbrubriqueConstatationDtos.Add(TbrubriqueConstatationDto.FromModel(item));
+                    }
+                    retour.Contenu = lstTbrubriqueConstatationDtos;
+
+
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT TbrubriqueConstatation");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public async Task<ObjetRetour> GetTbrubriqueConstatation(decimal id, string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    retour.Contenu = await _service.TbrubriqueConstatation.FindByConditionAync(a => a.IdRubConst == id);
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT TbrubriqueConstatation");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+
+            return retour;
+        }
+
+        public async Task<ObjetRetour> InsertTbrubriqueConstatation(TbrubriqueConstatationDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    await _service.TbrubriqueConstatation.CreateAsync(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS INSERTION TbrubriqueConstatation :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return retour;
+        }
+
+        public ObjetRetour MajTbrubriqueConstatation(TbrubriqueConstatationDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    var data = _service.TbrubriqueConstatation.FindByCondition(v => v.IdRubConst == value.IdRubConst).FirstOrDefault();
+                    data.IdRubConst = value.IdRubConst; data. 
+                LibRubConst = value.LibRubConst; data. 
+                IdUser = value.IdUser;  data. 
+                ModifieLe = value.ModifieLe; data. 
+                ModifiePar = value.ModifiePar; data. 
+                StateCode = value.StateCode; data. 
+                StatusCode = value.StatusCode;
+
+                    _service.TbrubriqueConstatation.Update(data);
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS UPDATE TbrubriqueConstatation :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        public ObjetRetour DeleteTbrubriqueConstatation(TbrubriqueConstatationDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    _service.TbrubriqueConstatation.Delete(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SUPPRESSION TbrubriqueConstatation :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        #endregion
+
+        #region TbrubriqueEstimation
+
+        public async Task<ObjetRetour> GetChargAllTbrubriqueEstimation(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+
+                    var datas = await _service.TbrubriqueEstimation.FindByConditionAync(m => m.StateCode == (int)StateCode.Actif);
+                    retour.Contenu = datas.Select(d => new ObjetParamModel { Id = d.IdRubEstim, ValueType = d.LibRubEstim});
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public ObjetRetour GetAllTbrubriqueEstimation(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    var datas = _service.TbrubriqueEstimation.FindAll().ToList();
+
+                    var lstTbrubriqueEstimationDtos = new List<TbrubriqueEstimationDto>();
+
+                    foreach (var item in datas)
+                    {
+                        lstTbrubriqueEstimationDtos.Add(TbrubriqueEstimationDto.FromModel(item));
+                    }
+                    retour.Contenu = lstTbrubriqueEstimationDtos;
+
+
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT TbrubriqueEstimation");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public async Task<ObjetRetour> GetTbrubriqueEstimation(decimal id, string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    retour.Contenu = await _service.TbrubriqueEstimation.FindByConditionAync(a => a.IdRubEstim == id);
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT TbrubriqueEstimation");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+
+            return retour;
+        }
+
+        public async Task<ObjetRetour> InsertTbrubriqueEstimation(TbrubriqueEstimationDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    await _service.TbrubriqueEstimation.CreateAsync(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS INSERTION TbrubriqueEstimation :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return retour;
+        }
+
+        public ObjetRetour MajTbrubriqueEstimation(TbrubriqueEstimationDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    var data = _service.TbrubriqueEstimation.FindByCondition(v => v.IdRubEstim == value.IdRubEstim).FirstOrDefault();
+                    data.IdRubEstim = value.IdRubEstim; data. 
+                LibRubEstim = value.LibRubEstim; data. 
+                IdUser = value.IdUser; data. 
+                DateCreation = value.DateCreation; data. 
+                ModifieLe = value.ModifieLe; data. 
+                ModifiePar = value.ModifiePar; data. 
+                StateCode = value.StateCode; data. 
+                StatusCode = value.StatusCode;
+
+                    _service.TbrubriqueEstimation.Update(data);
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS UPDATE TbrubriqueEstimation :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        public ObjetRetour DeleteTbrubriqueEstimation(TbrubriqueEstimationDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    _service.TbrubriqueEstimation.Delete(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SUPPRESSION TbrubriqueEstimation :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        #endregion
+
+        #region TbrubriqueEvaluation
+
+        public async Task<ObjetRetour> GetChargAllTbrubriqueEvaluation(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+
+                    var datas = await _service.TbrubriqueEvaluation.FindByConditionAync(m => m.StateCode == (int)StateCode.Actif);
+                    retour.Contenu = datas.Select(d => new ObjetParamModel { Id = d.IdRubEval, ValueType = d.LibRubEval});
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public ObjetRetour GetAllTbrubriqueEvaluation(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    var datas = _service.TbrubriqueEvaluation.FindAll().ToList();
+
+                    var lstTbrubriqueEvaluationDtos = new List<TbrubriqueEvaluationDto>();
+
+                    foreach (var item in datas)
+                    {
+                        lstTbrubriqueEvaluationDtos.Add(TbrubriqueEvaluationDto.FromModel(item));
+                    }
+                    retour.Contenu = lstTbrubriqueEvaluationDtos;
+
+
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT TbrubriqueEvaluation");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public async Task<ObjetRetour> GetTbrubriqueEvaluation(decimal id, string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    retour.Contenu = await _service.TbrubriqueEvaluation.FindByConditionAync(a => a.IdRubEval == id);
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT TbrubriqueEvaluation");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+
+            return retour;
+        }
+
+        public async Task<ObjetRetour> InsertTbrubriqueEvaluation(TbrubriqueEvaluationDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    await _service.TbrubriqueEvaluation.CreateAsync(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS INSERTION TbrubriqueEvaluation :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return retour;
+        }
+
+        public ObjetRetour MajTbrubriqueEvaluation(TbrubriqueEvaluationDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    var data = _service.TbrubriqueEvaluation.FindByCondition(v => v.IdRubEval == value.IdRubEval).FirstOrDefault();
+                    data.IdRubEval = value.IdRubEval; data. 
+                LibRubEval = value.LibRubEval; data. 
+                IdUser = value.IdUser;  data. 
+                ModifieLe = value.ModifieLe; data. 
+                ModifiePar = value.ModifiePar; data. 
+                StateCode = value.StateCode; data. 
+                StatusCode = value.StatusCode;
+
+                    _service.TbrubriqueEvaluation.Update(data);
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS UPDATE TbrubriqueEvaluation :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        public ObjetRetour DeleteTbrubriqueEvaluation(TbrubriqueEvaluationDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    _service.TbrubriqueEvaluation.Delete(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SUPPRESSION TbrubriqueEvaluation :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        #endregion
+
+
+        #region TbrubriqueHonoraire
+
+        public async Task<ObjetRetour> GetChargAllTbrubriqueHonoraire(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+
+                    var datas = await _service.TbrubriqueHonoraire.FindByConditionAync(m => m.StateCode == (int)StateCode.Actif);
+                    retour.Contenu = datas.Select(d => new ObjetParamModel { Id = d.Idrubhonr, ValueType = d.Librubhonor});
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public ObjetRetour GetAllTbrubriqueHonoraire(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    var datas = _service.TbrubriqueHonoraire.FindAll().ToList();
+
+                    var lstTbrubriqueHonoraireDtos = new List<TbrubriqueHonoraireDto>();
+
+                    foreach (var item in datas)
+                    {
+                        lstTbrubriqueHonoraireDtos.Add(TbrubriqueHonoraireDto.FromModel(item));
+                    }
+                    retour.Contenu = lstTbrubriqueHonoraireDtos;
+
+
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT TbrubriqueHonoraire");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public async Task<ObjetRetour> GetTbrubriqueHonoraire(decimal id, string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    retour.Contenu = await _service.TbrubriqueHonoraire.FindByConditionAync(a => a.Idrubhonr == id);
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT TbrubriqueHonoraire");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+
+            return retour;
+        }
+
+        public async Task<ObjetRetour> InsertTbrubriqueHonoraire(TbrubriqueHonoraireDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    await _service.TbrubriqueHonoraire.CreateAsync(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS INSERTION TbrubriqueHonoraire :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return retour;
+        }
+
+        public ObjetRetour MajTbrubriqueHonoraire(TbrubriqueHonoraireDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    var data = _service.TbrubriqueHonoraire.FindByCondition(v => v.Idrubhonr == value.Idrubhonr).FirstOrDefault();
+                    data.Idrubhonr = value.Idrubhonr; data. 
+                Librubhonor = value.Librubhonor; data. 
+                IdUser = value.IdUser; data. 
+                DateCreation = value.DateCreation; data. 
+                ModifieLe = value.ModifieLe; data. 
+                ModifiePar = value.ModifiePar; data. 
+                StateCode = value.StateCode; data. 
+                StatusCode = value.StatusCode;
+
+                    _service.TbrubriqueHonoraire.Update(data);
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS UPDATE TbrubriqueHonoraire :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        public ObjetRetour DeleteTbrubriqueHonoraire(TbrubriqueHonoraireDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    _service.TbrubriqueHonoraire.Delete(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SUPPRESSION TbrubriqueHonoraire :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        #endregion
+
+        #region TbrubriqueMainOeuvre
+
+        public async Task<ObjetRetour> GetChargAllTbrubriqueMainOeuvre(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+
+                    var datas = await _service.TbrubriqueMainOeuvre.FindByConditionAync(m => m.StateCode == (int)StateCode.Actif);
+                    retour.Contenu = datas.Select(d => new ObjetParamModel { Id = d.IdrubriqMo, ValueType = d.LibrubriqMo});
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public ObjetRetour GetAllTbrubriqueMainOeuvre(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    var datas = _service.TbrubriqueMainOeuvre.FindAll().ToList();
+
+                    var lstTbrubriqueMainOeuvreDtos = new List<TbrubriqueMainOeuvreDto>();
+
+                    foreach (var item in datas)
+                    {
+                        lstTbrubriqueMainOeuvreDtos.Add(TbrubriqueMainOeuvreDto.FromModel(item));
+                    }
+                    retour.Contenu = lstTbrubriqueMainOeuvreDtos;
+
+
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT TbrubriqueMainOeuvre");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public async Task<ObjetRetour> GetTbrubriqueMainOeuvre(decimal id, string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    retour.Contenu = await _service.TbrubriqueMainOeuvre.FindByConditionAync(a => a.IdrubriqMo == id);
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT TbrubriqueMainOeuvre");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+
+            return retour;
+        }
+
+        public async Task<ObjetRetour> InsertTbrubriqueMainOeuvre(TbrubriqueMainOeuvreDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    await _service.TbrubriqueMainOeuvre.CreateAsync(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS INSERTION TbrubriqueMainOeuvre :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return retour;
+        }
+
+        public ObjetRetour MajTbrubriqueMainOeuvre(TbrubriqueMainOeuvreDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    var data = _service.TbrubriqueMainOeuvre.FindByCondition(v => v.IdrubriqMo == value.IdrubriqMo).FirstOrDefault();
+                    data.IdrubriqMo = value.IdrubriqMo; data. 
+                LibrubriqMo = value.LibrubriqMo; data. 
+                Nbre = value.Nbre; data. 
+                IdUser = value.IdUser; ; data. 
+                ModifieLe = value.ModifieLe; data. 
+                ModifiePar = value.ModifiePar; data. 
+                StateCode = value.StateCode; data. 
+                StatusCode = value.StatusCode;
+
+                    _service.TbrubriqueMainOeuvre.Update(data);
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS UPDATE TbrubriqueMainOeuvre :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        public ObjetRetour DeleteTbrubriqueMainOeuvre(TbrubriqueMainOeuvreDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    _service.TbrubriqueMainOeuvre.Delete(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SUPPRESSION TbrubriqueMainOeuvre :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        #endregion
+
+        #region Tbservice
+
+        public async Task<ObjetRetour> GetChargAllTbservice(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+
+                    var datas = await _service.Tbservice.FindByConditionAync(m => m.StateCode == (int)StateCode.Actif);
+                    retour.Contenu = datas.Select(d => new ObjetParamModel { Id = d.IdServ, ValueType = d.LibServ});
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public ObjetRetour GetAllTbservice(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    var datas = _service.Tbservice.FindAll().ToList();
+
+                    var lstTbserviceDtos = new List<TbserviceDto>();
+
+                    foreach (var item in datas)
+                    {
+                        lstTbserviceDtos.Add(TbserviceDto.FromModel(item));
+                    }
+                    retour.Contenu = lstTbserviceDtos;
+
+
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT Tbservice");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public async Task<ObjetRetour> GetTbservice(decimal id, string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    retour.Contenu = await _service.Tbservice.FindByConditionAync(a => a.IdServ == id);
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT Tbservice");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+
+            return retour;
+        }
+
+        public async Task<ObjetRetour> InsertTbservice(TbserviceDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    await _service.Tbservice.CreateAsync(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS INSERTION Tbservice :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return retour;
+        }
+
+        public ObjetRetour MajTbservice(TbserviceDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    var data = _service.Tbservice.FindByCondition(v => v.IdServ == value.IdServ).FirstOrDefault();
+                    data.IdServ = value.IdServ; data. 
+                LibServ = value.LibServ; data. 
+                IdUser = value.IdUser;  data. 
+                ModifieLe = value.ModifieLe; data. 
+                ModifiePar = value.ModifiePar; data. 
+                StateCode = value.StateCode; data. 
+                StatusCode = value.StatusCode;
+
+                    _service.Tbservice.Update(data);
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS UPDATE Tbservice :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        public ObjetRetour DeleteTbservice(TbserviceDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    _service.Tbservice.Delete(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SUPPRESSION Tbservice :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        #endregion
+
+        #region Tbspecialite
+
+        public async Task<ObjetRetour> GetChargAllTbspecialite(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+
+                    var datas = await _service.Tbspecialite.FindByConditionAync(m => m.StateCode == (int)StateCode.Actif);
+                    retour.Contenu = datas.Select(d => new ObjetParamModel { Id = d.IdSpec, ValueType = d.LibSepec});
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public ObjetRetour GetAllTbspecialite(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    var datas = _service.Tbspecialite.FindAll().ToList();
+
+                    var lstTbspecialiteDtos = new List<TbspecialiteDto>();
+
+                    foreach (var item in datas)
+                    {
+                        lstTbspecialiteDtos.Add(TbspecialiteDto.FromModel(item));
+                    }
+                    retour.Contenu = lstTbspecialiteDtos;
+
+
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT Tbspecialite");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public async Task<ObjetRetour> GetTbspecialite(decimal id, string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    retour.Contenu = await _service.Tbspecialite.FindByConditionAync(a => a.IdSpec == id);
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT Tbspecialite");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+
+            return retour;
+        }
+
+        public async Task<ObjetRetour> InsertTbspecialite(TbspecialiteDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    await _service.Tbspecialite.CreateAsync(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS INSERTION Tbspecialite :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return retour;
+        }
+
+        public ObjetRetour MajTbspecialite(TbspecialiteDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    var data = _service.Tbspecialite.FindByCondition(v => v.IdSpec == value.IdSpec).FirstOrDefault();
+                    data.IdSpec = value.IdSpec; data. 
+                LibSepec = value.LibSepec; data. 
+                IdServ = value.IdServ; data. 
+                IdUser = value.IdUser;  data. 
+                ModifieLe = value.ModifieLe; data. 
+                ModifiePar = value.ModifiePar; data. 
+                StateCode = value.StateCode; data. 
+                StatusCode = value.StatusCode;
+
+                    _service.Tbspecialite.Update(data);
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS UPDATE Tbspecialite :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        public ObjetRetour DeleteTbspecialite(TbspecialiteDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    _service.Tbspecialite.Delete(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SUPPRESSION Tbspecialite :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        #endregion
+
+
 
         #region Tbvehicule
 
@@ -508,6 +3583,210 @@ namespace ApiExpertAuto.Services
         }
 
         #endregion
+
+
+
+        #region Tbville
+
+        public async Task<ObjetRetour> GetChargAllTbville(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+
+                    var datas = await _service.Tbville.FindByConditionAync(m => m.StateCode == (int)StateCode.Actif);
+                    retour.Contenu = datas.Select(d => new ObjetParamModel { Id = d.IdVille, ValueType = d.NomVille, Code = d.Distance });
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public ObjetRetour GetAllTbville(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    var datas = _service.Tbville.FindAll().ToList();
+
+                    var lstTbvilleDtos = new List<TbvilleDto>();
+
+                    foreach (var item in datas)
+                    {
+                        lstTbvilleDtos.Add(TbvilleDto.FromModel(item));
+                    }
+                    retour.Contenu = lstTbvilleDtos;
+
+
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT Tbville");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public async Task<ObjetRetour> GetTbville(decimal id, string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    retour.Contenu = await _service.Tbville.FindByConditionAync(a => a.IdVille == id);
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT Tbville");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+
+            return retour;
+        }
+
+
+        public async Task<ObjetRetour> InsertTbville(TbvilleDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    await _service.Tbville.CreateAsync(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS INSERTION Tbville :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return retour;
+        }
+
+
+        public ObjetRetour MajTbville(TbvilleDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    var data = _service.Tbville.FindByCondition(v => v.IdVille == value.IdVille).FirstOrDefault();
+                    data.ModifieLe = value.ModifieLe;
+                    data.Distance = value.Distance;
+                    data.ModifiePar = value.ModifiePar;
+                    data.NomVille = value.NomVille;
+                    data.StateCode = value.StateCode;
+
+                    _service.Tbville.Update(data);
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS UPDATE Tbville :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+
+        public ObjetRetour DeleteTbville(TbvilleDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    _service.Tbville.Delete(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SUPPRESSION Tbville :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        #endregion
+
 
         #region TbtypeVehicule
         public async Task<ObjetRetour> GetChargAllTbtypeVehicule(string token = "")
@@ -3684,7 +6963,6 @@ namespace ApiExpertAuto.Services
         }
 
         #endregion
-
 
     }
 }

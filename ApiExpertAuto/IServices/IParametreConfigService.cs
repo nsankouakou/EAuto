@@ -58,14 +58,6 @@ namespace ApiExpertAuto.IServices
 
 
         #endregion
-        #region Assurance
-        //Récupération des assurances
-        Task<ObjetRetour> getAllAssurance(string token);
-
-        Task<ObjetRetour> getSingleAssurance(string token, int id);
-
-        Task<ObjetRetour> setSingleAssurance(string token, TbassuranceDto assurance);
-        #endregion
 
         #region Tbville
 
@@ -83,7 +75,6 @@ namespace ApiExpertAuto.IServices
         ObjetRetour DeleteTbville(TbvilleDto value);
 
         #endregion
-
 
         #region Tbvehicule
 
@@ -186,7 +177,6 @@ namespace ApiExpertAuto.IServices
         ObjetRetour DeleteTbtypeTravaux(TbtypeTravauxDto value);
 
         #endregion
-
 
         #region TbtypePeinture
 
@@ -374,5 +364,277 @@ namespace ApiExpertAuto.IServices
         ObjetRetour DeleteTbgarage(TbgarageDto value);
 
         #endregion
+
+        #region Tbassurance
+
+
+        ObjetRetour GetAllTbassurance(string token = "");
+
+        Task<ObjetRetour> GetTbassurance(decimal id, string token = "");
+
+        Task<ObjetRetour> InsertTbassurance(TbassuranceDto value);
+
+        ObjetRetour MajTbassurance(TbassuranceDto value);
+
+        ObjetRetour DeleteTbassurance(TbassuranceDto value);
+
+        #endregion
+
+        #region Tbagent
+
+
+        ObjetRetour GetAllTbagent(string token = "");
+
+        Task<ObjetRetour> GetTbagent(decimal id, string token = "");
+
+        Task<ObjetRetour> InsertTbagent(TbagentDto value);
+
+        ObjetRetour MajTbagent(TbagentDto value);
+
+        ObjetRetour DeleteTbagent(TbagentDto value);
+
+        #endregion
+
+        #region TbautreRubrique
+
+        Task<ObjetRetour> GetChargAllTbautreRubrique(string token = "");
+
+        ObjetRetour GetAllTbautreRubrique(string token = "");
+
+        Task<ObjetRetour> GetTbautreRubrique(decimal id, string token = "");
+
+        Task<ObjetRetour> InsertTbautreRubrique(TbautreRubriqueDto value);
+
+        ObjetRetour MajTbautreRubrique(TbautreRubriqueDto value);
+
+        ObjetRetour DeleteTbautreRubrique(TbautreRubriqueDto value);
+
+        #endregion
+
+        #region Tbcarosserie
+
+        Task<ObjetRetour> GetChargAllTbcarosserie(string token = "");
+
+        ObjetRetour GetAllTbcarosserie(string token = "");
+
+        Task<ObjetRetour> GetTbcarosserie(decimal id, string token = "");
+
+        Task<ObjetRetour> InsertTbcarosserie(TbcarosserieDto value);
+
+        ObjetRetour MajTbcarosserie(TbcarosserieDto value);
+
+        ObjetRetour DeleteTbcarosserie(TbcarosserieDto value);
+
+        #endregion
+
+        #region Tbcommune
+
+        Task<ObjetRetour> GetChargAllTbcommune(string token = "");
+
+        ObjetRetour GetAllTbcommune(string token = "");
+
+        Task<ObjetRetour> GetTbcommune(decimal id, string token = "");
+
+        Task<ObjetRetour> InsertTbcommune(TbcommuneDto value);
+
+        ObjetRetour MajTbcommune(TbcommuneDto value);
+
+        ObjetRetour DeleteTbcommune(TbcommuneDto value);
+
+        #endregion
+
+        #region Tbcouleur
+
+        Task<ObjetRetour> GetChargAllTbcouleur(string token = "");
+
+        ObjetRetour GetAllTbcouleur(string token = "");
+
+        Task<ObjetRetour> GetTbcouleur(decimal id, string token = "");
+
+        Task<ObjetRetour> InsertTbcouleur(TbcouleurDto value);
+
+        ObjetRetour MajTbcouleur(TbcouleurDto value);
+
+        ObjetRetour DeleteTbcouleur(TbcouleurDto value);
+
+        #endregion
+
+        #region Tbenergie
+
+        Task<ObjetRetour> GetChargAllTbenergie(string token = "");
+
+        ObjetRetour GetAllTbenergie(string token = "");
+
+        Task<ObjetRetour> GetTbenergie(decimal id, string token = "");
+
+        Task<ObjetRetour> InsertTbenergie(TbenergieDto value);
+
+        ObjetRetour MajTbenergie(TbenergieDto value);
+
+        ObjetRetour DeleteTbenergie(TbenergieDto value);
+
+        #endregion
+
+        #region Tbfourniture
+
+        Task<ObjetRetour> GetChargAllTbfourniture(string token = "");
+
+        ObjetRetour GetAllTbfourniture(string token = "");
+
+        Task<ObjetRetour> GetTbfourniture(decimal id, string token = "");
+
+        Task<ObjetRetour> InsertTbfourniture(TbfournitureDto value);
+
+        ObjetRetour MajTbfourniture(TbfournitureDto value);
+
+        ObjetRetour DeleteTbfourniture(TbfournitureDto value);
+
+        #endregion
+
+        #region TbpointChoc
+
+        Task<ObjetRetour> GetChargAllTbpointChoc(string token = "");
+
+        ObjetRetour GetAllTbpointChoc(string token = "");
+
+        Task<ObjetRetour> GetTbpointChoc(decimal id, string token = "");
+
+        Task<ObjetRetour> InsertTbpointChoc(TbpointChocDto value);
+
+        ObjetRetour MajTbpointChoc(TbpointChocDto value);
+
+        ObjetRetour DeleteTbpointChoc(TbpointChocDto value);
+
+        #endregion
+
+        #region Tbproprietaire
+
+
+        ObjetRetour GetAllTbproprietaire(string token = "");
+
+        Task<ObjetRetour> GetTbproprietaire(decimal id, string token = "");
+
+        Task<ObjetRetour> InsertTbproprietaire(TbproprietaireDto value);
+
+        ObjetRetour MajTbproprietaire(TbproprietaireDto value);
+
+        ObjetRetour DeleteTbproprietaire(TbproprietaireDto value);
+
+        #endregion
+
+        #region TbrubriqueConstatation
+
+        Task<ObjetRetour> GetChargAllTbrubriqueConstatation(string token = "");
+
+        ObjetRetour GetAllTbrubriqueConstatation(string token = "");
+
+        Task<ObjetRetour> GetTbrubriqueConstatation(decimal id, string token = "");
+
+        Task<ObjetRetour> InsertTbrubriqueConstatation(TbrubriqueConstatationDto value);
+
+        ObjetRetour MajTbrubriqueConstatation(TbrubriqueConstatationDto value);
+
+        ObjetRetour DeleteTbrubriqueConstatation(TbrubriqueConstatationDto value);
+
+        #endregion
+
+        #region TbrubriqueEstimation
+
+        Task<ObjetRetour> GetChargAllTbrubriqueEstimation(string token = "");
+
+        ObjetRetour GetAllTbrubriqueEstimation(string token = "");
+
+        Task<ObjetRetour> GetTbrubriqueEstimation(decimal id, string token = "");
+
+        Task<ObjetRetour> InsertTbrubriqueEstimation(TbrubriqueEstimationDto value);
+
+        ObjetRetour MajTbrubriqueEstimation(TbrubriqueEstimationDto value);
+
+        ObjetRetour DeleteTbrubriqueEstimation(TbrubriqueEstimationDto value);
+
+        #endregion
+
+        #region TbrubriqueEvaluation
+
+        Task<ObjetRetour> GetChargAllTbrubriqueEvaluation(string token = "");
+
+        ObjetRetour GetAllTbrubriqueEvaluation(string token = "");
+
+        Task<ObjetRetour> GetTbrubriqueEvaluation(decimal id, string token = "");
+
+        Task<ObjetRetour> InsertTbrubriqueEvaluation(TbrubriqueEvaluationDto value);
+
+        ObjetRetour MajTbrubriqueEvaluation(TbrubriqueEvaluationDto value);
+
+        ObjetRetour DeleteTbrubriqueEvaluation(TbrubriqueEvaluationDto value);
+
+        #endregion
+
+        #region TbrubriqueHonoraire
+
+        Task<ObjetRetour> GetChargAllTbrubriqueHonoraire(string token = "");
+
+        ObjetRetour GetAllTbrubriqueHonoraire(string token = "");
+
+        Task<ObjetRetour> GetTbrubriqueHonoraire(decimal id, string token = "");
+
+        Task<ObjetRetour> InsertTbrubriqueHonoraire(TbrubriqueHonoraireDto value);
+
+        ObjetRetour MajTbrubriqueHonoraire(TbrubriqueHonoraireDto value);
+
+        ObjetRetour DeleteTbrubriqueHonoraire(TbrubriqueHonoraireDto value);
+
+        #endregion
+
+        #region TbrubriqueMainOeuvre
+
+        Task<ObjetRetour> GetChargAllTbrubriqueMainOeuvre(string token = "");
+
+        ObjetRetour GetAllTbrubriqueMainOeuvre(string token = "");
+
+        Task<ObjetRetour> GetTbrubriqueMainOeuvre(decimal id, string token = "");
+
+        Task<ObjetRetour> InsertTbrubriqueMainOeuvre(TbrubriqueMainOeuvreDto value);
+
+        ObjetRetour MajTbrubriqueMainOeuvre(TbrubriqueMainOeuvreDto value);
+
+        ObjetRetour DeleteTbrubriqueMainOeuvre(TbrubriqueMainOeuvreDto value);
+
+        #endregion
+
+        #region Tbservice
+
+        Task<ObjetRetour> GetChargAllTbservice(string token = "");
+
+        ObjetRetour GetAllTbservice(string token = "");
+
+        Task<ObjetRetour> GetTbservice(decimal id, string token = "");
+
+        Task<ObjetRetour> InsertTbservice(TbserviceDto value);
+
+        ObjetRetour MajTbservice(TbserviceDto value);
+
+        ObjetRetour DeleteTbservice(TbserviceDto value);
+
+        #endregion
+
+        #region Tbspecialite
+
+        Task<ObjetRetour> GetChargAllTbspecialite(string token = "");
+
+        ObjetRetour GetAllTbspecialite(string token = "");
+
+        Task<ObjetRetour> GetTbspecialite(decimal id, string token = "");
+
+        Task<ObjetRetour> InsertTbspecialite(TbspecialiteDto value);
+
+        ObjetRetour MajTbspecialite(TbspecialiteDto value);
+
+        ObjetRetour DeleteTbspecialite(TbspecialiteDto value);
+
+        #endregion
+
+
+
     }
 }

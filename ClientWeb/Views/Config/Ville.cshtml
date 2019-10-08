@@ -1,0 +1,384 @@
+﻿@{
+    ViewData["Title"] = "Ville";
+}
+<!--page level css -->
+<link rel="stylesheet" type="text/css" href="~/assets/vendors/datatables/css/dataTables.bootstrap.css" />
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Ville
+    </h1>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading clearfix">
+                    <h3 class="panel-title pull-left m-t-6">
+                        Liste des Villes
+                    </h3>
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-success btn-sm" onclick="addview()" data-toggle="modal" data-target="#addEdit" data-placement="top"><i class="glyphicon glyphicon-plus"></i>  Ajouter</button>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover" id="sample_1">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        NOM VILLE
+                                    </th>
+                                    <th>DISTANCE</th>
+                                    <th>ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Abidjan</td>
+                                    <td>200 km</td>
+                                    <td>
+                                        <button class="btn btn-primary btn-xs">
+                                            <span class="glyphicon glyphicon-pencil"></span>
+                                        </button>
+                                        <button class="btn btn-danger btn-xs" onclick="DeleteRow(2)">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /.content -->
+<!-- start modal -->
+<div class="modal fade" id="addEdit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title custom_align" id="Heading">Nouvelle Ville</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <input class="form-control " type="text" placeholder="Nom Ville" id="NomVille">
+                </div>
+                <div class="form-group">
+                    <input class="form-control " type="text" placeholder="Distance" id="Distance">
+                </div>
+            </div>
+            <div class="modal-footer ">
+                <button type="reset" class="btn btn-danger" data-dismiss="modal">
+                    Fermer
+                </button>
+                <button type="button" class="btn btn-success">
+                    <span class="glyphicon glyphicon-ok-sign"></span> Enregistrer
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /. modal -->
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            //debugger;
+
+            charger_tableau();
+            //charger_donnees();
+
+        });
+        //Chargement des données dans un datatable
+        function charger_tableau() {
+
+            var oTable = $("#tbTypeTaxe").DataTable({
+                "ajax": {
+                    "type": "GET",
+                    "url": "/Configuration/GetAllTypeTaxe",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "valueType" },
+                    {
+                        "data": "typeID", "render": function (data) {
+                            var id = JSON.stringify(data);
+                            return "<a class='btn btn-primary m - btn m - btn--pill m - btn--wide btn - sm' onclick='Editerow(" + id + ")' style='color:white'>Modifier</a> <a class='btn btn-danger m - btn m - btn--pill m - btn--wide btn - sm' onclick='DeleteRow(" + id + ")' style='color:white'>Suprimer</a>";
+                        }
+                    }
+                ],
+                data: [],
+                dom: 'Bfrtip',
+                buttons: [
+                    //personalisation du bouton print
+                    //'print',
+                    {
+                        extend: 'print',
+                        title: 'Liste des  Type de Taxes',//Titre de la page
+                        text: function (dt, button, config) {
+                            return dt.i18n('buttons.print', 'Imprimer');//Changer le titre du bouton
+                        },
+                        customize: function (win) {//Retirer les champs à ne pas afficher avant l'impression
+                            $(win.document.body).find('table thead th:nth-child(2)').css('display', 'none');
+                            $(win.document.body).find('table tbody td:nth-child(2)').css('display', 'none');
+
+                            //$(win.document.body).find('table thead th:nth-child(2)').css('display', 'none');
+                            //$(win.document.body).find('table tbody td:nth-child(2)').css('display', 'none');
+
+                            //$(win.document.body).find('table thead th:nth-child(8)').css('display', 'none');
+                            //$(win.document.body).find('table tbody td:nth-child(8)').css('display', 'none');
+                        },
+                    },
+
+                    //personalisation du bouton excel
+                    //'excel',
+                    {
+                        extend: 'excel',
+                        title: 'Liste des  Type de Taxes',//Titre de la page
+                        exportOptions: {
+                            columns: [0/*, 3, 4, 5, 6*/]//Affiche les colonnes selon son choix
+                        },
+                        text: function (dt, button, config) {
+                            return dt.i18n('buttons.excel', 'Excel');//Changer le titre du bouton
+                        }
+
+                    }
+                ],
+
+
+                language: {
+                    processing: "Traitement en cours...",
+                    search: "Rechercher&nbsp;:",
+                    lengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
+                    info: "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+                    infoEmpty: "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+                    infoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+                    infoPostFix: "",
+                    loadingRecords: "Chargement en cours...",
+                    zeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
+                    emptyTable: "Aucune donnée disponible dans le tableau",
+                    paginate: {
+                        first: "Premier",
+                        previous: "Pr&eacute;c&eacute;dent",
+                        next: "Suivant",
+                        last: "Dernier"
+                    },
+                    aria: {
+                        sortAscending: ": activer pour trier la colonne par ordre croissant",
+                        sortDescending: ": activer pour trier la colonne par ordre décroissant"
+                    }
+                },
+
+                drawCallback: function () {//Styliser le tableau
+                    //$('table#mtable tbody tr td').css('padding', '0px 0px 0px 0px');
+                    $('table#tbTypeTaxe tbody tr td').css('height', '15px');
+                    $('table#tbTypeTaxe tbody td:nth-child(2)').css('text-align', 'right');
+
+                    $('table#tbTypeTaxe thead td:nth-child(2)').css('width', '30%');
+                    $('table#tbTypeTaxe tbody td:nth-child(2)').css('width', '30%');
+                },
+                rowCallback: function (row, data) { },
+                filter: true,
+                info: true,
+                ordering: false,
+                processing: false,
+                retrieve: true
+            });
+        }
+
+
+        function addview() {
+            $("#m_modal_4").modal('show');
+            $("#Editer").hide();//cache/affiche le Titre du modal
+            $("#Nouveau").show();//cache/affiche le Titre du modal
+
+            $("#idGt").hide();//cache le champ id
+            $("#updaterecord").hide();//cache le bouton Enregistrement de Modification
+            $("#submitdata").show();
+            viderForm();
+            return false;
+        }
+
+        function editview() {
+            $("#m_modal_4").modal('show');
+            $("#Editer").show();//cache/affiche le Titre du modal
+            $("#Nouveau").hide();//cache/affiche le Titre du modal
+
+            $("#idGt").hide();//cache le champ id
+            $("#updaterecord").show();//cache le bouton Enregistrement de Modification
+            $("#submitdata").hide();
+            return false;
+        }
+
+        //vider les champs du formulaires
+        function viderForm() {
+            $(".form-control").val('');
+            return false;
+        }
+
+
+    </script>
+
+
+    @*========================FONCTION TOUS LES EVENNEMENTS============================*@
+    <script>
+
+     //fonction pour ajouter un element construit par objet
+    function btnsubmit() {
+        //debugger;
+        var table = $("#tbTypeTaxe").DataTable();
+
+        //Creation de l'objet JSON
+        var operation = {
+            //TypeTaxeId: 0,
+            Libelle: $("#libelle").val()
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("AddTypeTaxe", "Configuration")',
+            data: { jsonObject: JSON.stringify(operation) },
+            dataType: "json",
+            success: function (data) {
+                if (data.ok == true) {
+                    swal("Succès", data.message, "success");
+
+                    $("#m_modal_4").modal('hide');//ferme le modal
+                    table.destroy();//destruction du tableau
+                    charger_tableau();//affichage du nouveau tableau
+                    viderForm();//vider les champs du formulaire
+                } else {
+                    swal("Attention", data.message , "error");
+                    }
+            },
+            error: function (msg) {
+
+                swal("Ooups!!!", "code erreur 404 ", "error");
+
+            }
+
+        });
+    }
+
+
+
+    //fonction qui remplit le modal des infos à modifier
+    function Editerow(id) {
+        //alert(id);
+        //Creation de l'objet JSON
+        var operation = {
+            TypeTaxeId: id
+        };
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetTypeTaxe", "Configuration")',
+            data: { jsonObject: JSON.stringify(operation) },
+            datatype: 'JSON',
+            success: function (data) {
+
+                for (var i = 0; i < data.length; i++) {
+                    $("#idGt").val(data[i].typeTaxeId);
+                    $("#libelle").val(data[i].libelle);
+                }
+
+                //etat du formulaire
+                editview();
+            },
+            error: function (msg) {
+                alert(msg.responseText);
+            }
+        });
+    }
+
+    //fonction pour enregistrer les modifications
+    function Updatesubmit() {
+        //debugger;
+        var table = $("#tbTypeTaxe").DataTable();
+
+        //Creation de l'objet JSON
+        var operation = {
+           TypeTaxeId:  $("#idGt").val(),
+            Libelle: $("#libelle").val()
+        };
+
+        $.ajax({
+            type: 'PUT',
+            url: '@Url.Action("UpdateTypeTaxe", "Configuration")',
+            data: { jsonObject: JSON.stringify(operation) },
+            dataType: "json",
+            success: function (data) {
+                if (data.ok == true) {
+                    swal("Succès", data.message, "success");
+
+                    $("#m_modal_4").modal('hide');//ferme le modal
+                    table.destroy();//destruction du tableau
+                    charger_tableau();//affichage du nouveau tableau
+                    viderForm();//vider les champs du formulaire
+                } else {
+                        swal("Attention", "Un ou plusieurs champs sont vide ", "error");
+                    }
+            },
+            error: function (msg) {
+
+                swal("Ooups!!!", "code erreur 404 ", "error");
+
+            }
+
+        });
+    }
+
+
+    function DeleteRow(id) {
+        var table = $("#tbTypeTaxe").DataTable();
+
+        //Creation de l'objet JSON
+        var operation = {
+            TypeTaxeId: id
+        };
+
+        swal({
+            title: 'Attention!',
+            text: "Voulez vous supprimer cet élement ?",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#22D69D',
+            cancelButtonColor: '#FB8678',
+            confirmButtonText: 'Oui, supprimer!',
+            cancelButtonText: 'Non, Merci!',
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger'
+        }).then(function () {
+            $.ajax({
+                type: 'PUT',
+                url: '@Url.Action("DeleteTypeTaxe", "Configuration")',
+                data: { jsonObject: JSON.stringify(operation) },
+                dataType: "json",
+                success: function (data) {
+                    if (data.ok == true) {
+                        swal("Succès", data.message, "success");
+
+                        table.destroy();
+                        charger_tableau();
+                    } else {
+                            swal("Attention", "Le sevice est inaccessible", "error");
+                        }
+                },
+                error: function () {
+                    swal("Ooups!!!", "code erreur 404 ", "error");
+                }
+            });
+        });
+
+    }
+    </script>
+}

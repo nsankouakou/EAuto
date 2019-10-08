@@ -104,14 +104,14 @@ namespace Entities.Models
         public virtual DbSet<TbvehiculeAssurance> TbvehiculeAssurance { get; set; }
         public virtual DbSet<Tbville> Tbville { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=ASC-PC123\\SQL2016;Database=DbExpertAuto;User Id=sa;Password=P@ssword;");
-            }
-        }
+//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+//        {
+//            if (!optionsBuilder.IsConfigured)
+//            {
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+//                optionsBuilder.UseSqlServer("Server=ASC-PC123\\SQL2016;Database=DbExpertAuto;User Id=sa;Password=P@ssword;");
+//            }
+//        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -71,6 +71,21 @@ namespace Repository
             }
         }
 
+        private ITbagentRepository _Tbagent;
+
+        public ITbagentRepository Tbagent
+        {
+            get
+            {
+                if (_Tbagent == null)
+                {
+                    _Tbagent = new TbagentRepository(_repoContext);
+                }
+
+                return _Tbagent;
+            }
+        }
+
 
         private ITbautreRubriqueRepository _TbautreRubrique;
 

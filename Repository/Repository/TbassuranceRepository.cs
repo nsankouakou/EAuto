@@ -6,9 +6,9 @@ using System.Text;
 
 namespace Repository
 {
-    public class TbassuranceRepository : RepositoryBase<Tbassurance>, ITbassuranceRepository
+    public class TbagentRepository : RepositoryBase<Tbagent>, ITbagentRepository
     {
-        public TbassuranceRepository(DbExpertAutoContext repositoryContext)
+        public TbagentRepository(DbExpertAutoContext repositoryContext)
             : base(repositoryContext)
         {
         }
