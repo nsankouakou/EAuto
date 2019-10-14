@@ -58,7 +58,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbville")]
         public async Task<IActionResult> InserTbville(TbvilleDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -73,7 +73,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbville")]
         public IActionResult MajTbville(TbvilleDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -90,7 +90,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbville")]
         public IActionResult DeleteTbville(TbvilleDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -134,7 +134,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbvehicule")]
         public async Task<IActionResult> InserTbvehicule(TbvehiculeDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -149,7 +149,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbvehicule")]
         public IActionResult MajTbvehicule(TbvehiculeDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -166,7 +166,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbvehicule")]
         public IActionResult DeleteTbvehicule(TbvehiculeDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -176,6 +176,82 @@ namespace ApiExpertAuto.Controllers
 
         #endregion
 
+        #region TbtypeVehicule
+        /// <summary>
+        /// Retourne Toutes les villes
+        /// </summary>
+        /// <param name="token">Token d'authentification</param>
+        /// <returns></returns>
+        [HttpGet("GetALLTbtypeVehicule")]
+        public IActionResult GetALLTbtypeVehicule(string token)
+        {
+
+            return Ok(_service.GetAllTbtypeVehicule(token));
+        }
+
+        /// <summary>
+        /// Retourne une ville par l'id
+        /// </summary>
+        /// <param name="id">Id de ville</param>
+        /// <param name="token">Token d'authentification</param>
+        /// <returns></returns>
+        [HttpGet("GetTbtypeVehiculeUnique")]
+        public async Task<IActionResult> GetTbtypeVehiculeUnique(decimal id, string token)
+        {
+
+            return Ok(await _service.GetTbtypeVehicule(id, token));
+        }
+
+        /// <summary>
+        /// Insertion de nouvelle ville
+        /// </summary>
+        /// <param name="value">Instance de ville à ajouter</param>
+        /// <returns></returns>
+        [HttpPost("InserTbtypeVehicule")]
+        public async Task<IActionResult> InserTbtypeVehicule(TbtypeVehiculeDto value)
+        {
+            if (value == null)
+            {
+                return BadRequest();
+            }
+            return Ok(await _service.InsertTbtypeVehicule(value));
+        }
+
+        /// <summary>
+        /// Mise à jour de ville
+        /// </summary>
+        /// <param name="value">Instance de ville mise à jour</param>
+        /// <returns></returns>
+        [HttpPost("MajTbtypeVehicule")]
+        public IActionResult MajTbtypeVehicule(TbtypeVehiculeDto value)
+        {
+            if (value == null)
+            {
+                return BadRequest();
+            }
+            return Ok(_service.MajTbtypeVehicule(value));
+        }
+
+
+
+        /// <summary>
+        /// Suppression de ville
+        /// </summary>
+        /// <param name="value">Instance de ville à supprimer</param>
+        /// <returns></returns>
+        [HttpPost("DeleteTbtypeVehicule")]
+        public IActionResult DeleteTbtypeVehicule(TbtypeVehiculeDto value)
+        {
+            if (value == null)
+            {
+                return BadRequest();
+            }
+            return Ok(_service.DeleteTbtypeVehicule(value));
+        }
+
+
+        #endregion
+        
         #region TbtypeValeur
         /// <summary>
         /// Retourne Toutes les villes
@@ -210,7 +286,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbtypeValeur")]
         public async Task<IActionResult> InserTbtypeValeur(TbtypeValeurDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -225,7 +301,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbtypeValeur")]
         public IActionResult MajTbtypeValeur(TbtypeValeurDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -242,7 +318,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbtypeValeur")]
         public IActionResult DeleteTbtypeValeur(TbtypeValeurDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -286,7 +362,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbtypeUserDroit")]
         public async Task<IActionResult> InserTbtypeUserDroit(TbtypeUserDroitDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -301,7 +377,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbtypeUserDroit")]
         public IActionResult MajTbtypeUserDroit(TbtypeUserDroitDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -318,7 +394,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbtypeUserDroit")]
         public IActionResult DeleteTbtypeUserDroit(TbtypeUserDroitDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -362,7 +438,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbtypeUser")]
         public async Task<IActionResult> InserTbtypeUser(TbtypeUserDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -377,7 +453,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbtypeUser")]
         public IActionResult MajTbtypeUser(TbtypeUserDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -394,7 +470,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbtypeUser")]
         public IActionResult DeleteTbtypeUser(TbtypeUserDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -438,7 +514,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbtypeTravaux")]
         public async Task<IActionResult> InserTbtypeTravaux(TbtypeTravauxDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -453,7 +529,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbtypeTravaux")]
         public IActionResult MajTbtypeTravaux(TbtypeTravauxDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -470,7 +546,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbtypeTravaux")]
         public IActionResult DeleteTbtypeTravaux(TbtypeTravauxDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -514,7 +590,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbtypePeinture")]
         public async Task<IActionResult> InserTbtypePeinture(TbtypePeintureDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -529,7 +605,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbtypePeinture")]
         public IActionResult MajTbtypePeinture(TbtypePeintureDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -546,7 +622,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbtypePeinture")]
         public IActionResult DeleteTbtypePeinture(TbtypePeintureDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -590,7 +666,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbtypeNote")]
         public async Task<IActionResult> InserTbtypeNote(TbtypeNoteDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -605,7 +681,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbtypeNote")]
         public IActionResult MajTbtypeNote(TbtypeNoteDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -622,7 +698,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbtypeNote")]
         public IActionResult DeleteTbtypeNote(TbtypeNoteDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -666,7 +742,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbtypeExpertise")]
         public async Task<IActionResult> InserTbtypeExpertise(TbtypeExpertiseDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -681,7 +757,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbtypeExpertise")]
         public IActionResult MajTbtypeExpertise(TbtypeExpertiseDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -698,7 +774,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbtypeExpertise")]
         public IActionResult DeleteTbtypeExpertise(TbtypeExpertiseDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -742,7 +818,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbtypTravauxMainOuvre")]
         public async Task<IActionResult> InserTbtypTravauxMainOuvre(TbtypTravauxMainOuvreDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -757,7 +833,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbtypTravauxMainOuvre")]
         public IActionResult MajTbtypTravauxMainOuvre(TbtypTravauxMainOuvreDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -774,7 +850,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbtypTravauxMainOuvre")]
         public IActionResult DeleteTbtypTravauxMainOuvre(TbtypTravauxMainOuvreDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -818,7 +894,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbtypGarage")]
         public async Task<IActionResult> InserTbtypGarage(TbtypGarageDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -833,7 +909,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbtypGarage")]
         public IActionResult MajTbtypGarage(TbtypGarageDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -850,7 +926,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbtypGarage")]
         public IActionResult DeleteTbtypGarage(TbtypGarageDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -894,7 +970,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbtva")]
         public async Task<IActionResult> InserTbtva(TbtvaDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -909,7 +985,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbtva")]
         public IActionResult MajTbtva(TbtvaDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -926,7 +1002,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbtva")]
         public IActionResult DeleteTbtva(TbtvaDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -970,7 +1046,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbparametre")]
         public async Task<IActionResult> InserTbparametre(TbparametreDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -985,7 +1061,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbparametre")]
         public IActionResult MajTbparametre(TbparametreDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1002,7 +1078,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbparametre")]
         public IActionResult DeleteTbparametre(TbparametreDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1046,7 +1122,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbmodele")]
         public async Task<IActionResult> InserTbmodele(TbmodeleDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1061,7 +1137,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbmodele")]
         public IActionResult MajTbmodele(TbmodeleDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1078,7 +1154,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbmodele")]
         public IActionResult DeleteTbmodele(TbmodeleDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1122,7 +1198,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbmarque")]
         public async Task<IActionResult> InserTbmarque(TbmarqueDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1137,7 +1213,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbmarque")]
         public IActionResult MajTbmarque(TbmarqueDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1154,7 +1230,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbmarque")]
         public IActionResult DeleteTbmarque(TbmarqueDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1198,7 +1274,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbgenre")]
         public async Task<IActionResult> InserTbgenre(TbgenreDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1213,7 +1289,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbgenre")]
         public IActionResult MajTbgenre(TbgenreDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1230,7 +1306,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbgenre")]
         public IActionResult DeleteTbgenre(TbgenreDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1274,7 +1350,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbgarage")]
         public async Task<IActionResult> InserTbgarage(TbgarageDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1289,7 +1365,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbgarage")]
         public IActionResult MajTbgarage(TbgarageDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1306,7 +1382,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbgarage")]
         public IActionResult DeleteTbgarage(TbgarageDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1350,7 +1426,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbassurance")]
         public async Task<IActionResult> InserTbassurance(TbassuranceDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1365,7 +1441,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbassurance")]
         public IActionResult MajTbassurance(TbassuranceDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1382,7 +1458,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbassurance")]
         public IActionResult DeleteTbassurance(TbassuranceDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1426,7 +1502,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbagent")]
         public async Task<IActionResult> InserTbagent(TbagentDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1441,7 +1517,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbagent")]
         public IActionResult MajTbagent(TbagentDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1458,7 +1534,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbagent")]
         public IActionResult DeleteTbagent(TbagentDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1502,7 +1578,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbautreRubrique")]
         public async Task<IActionResult> InserTbautreRubrique(TbautreRubriqueDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1517,7 +1593,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbautreRubrique")]
         public IActionResult MajTbautreRubrique(TbautreRubriqueDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1534,7 +1610,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbautreRubrique")]
         public IActionResult DeleteTbautreRubrique(TbautreRubriqueDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1578,7 +1654,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbcarosserie")]
         public async Task<IActionResult> InserTbcarosserie(TbcarosserieDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1593,7 +1669,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbcarosserie")]
         public IActionResult MajTbcarosserie(TbcarosserieDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1610,7 +1686,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbcarosserie")]
         public IActionResult DeleteTbcarosserie(TbcarosserieDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1654,7 +1730,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbcommune")]
         public async Task<IActionResult> InserTbcommune(TbcommuneDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1669,7 +1745,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbcommune")]
         public IActionResult MajTbcommune(TbcommuneDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1686,7 +1762,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbcommune")]
         public IActionResult DeleteTbcommune(TbcommuneDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1730,7 +1806,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbcouleur")]
         public async Task<IActionResult> InserTbcouleur(TbcouleurDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1745,7 +1821,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbcouleur")]
         public IActionResult MajTbcouleur(TbcouleurDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1762,7 +1838,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbcouleur")]
         public IActionResult DeleteTbcouleur(TbcouleurDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1806,7 +1882,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbenergie")]
         public async Task<IActionResult> InserTbenergie(TbenergieDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1821,7 +1897,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbenergie")]
         public IActionResult MajTbenergie(TbenergieDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1838,7 +1914,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbenergie")]
         public IActionResult DeleteTbenergie(TbenergieDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1882,7 +1958,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbfourniture")]
         public async Task<IActionResult> InserTbfourniture(TbfournitureDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1897,7 +1973,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbfourniture")]
         public IActionResult MajTbfourniture(TbfournitureDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1914,7 +1990,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbfourniture")]
         public IActionResult DeleteTbfourniture(TbfournitureDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1958,7 +2034,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbpointChoc")]
         public async Task<IActionResult> InserTbpointChoc(TbpointChocDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1973,7 +2049,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbpointChoc")]
         public IActionResult MajTbpointChoc(TbpointChocDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -1990,7 +2066,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbpointChoc")]
         public IActionResult DeleteTbpointChoc(TbpointChocDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -2034,7 +2110,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbproprietaire")]
         public async Task<IActionResult> InserTbproprietaire(TbproprietaireDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -2049,7 +2125,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbproprietaire")]
         public IActionResult MajTbproprietaire(TbproprietaireDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -2066,7 +2142,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbproprietaire")]
         public IActionResult DeleteTbproprietaire(TbproprietaireDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -2110,7 +2186,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbrubriqueConstatation")]
         public async Task<IActionResult> InserTbrubriqueConstatation(TbrubriqueConstatationDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -2125,7 +2201,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbrubriqueConstatation")]
         public IActionResult MajTbrubriqueConstatation(TbrubriqueConstatationDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -2142,7 +2218,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbrubriqueConstatation")]
         public IActionResult DeleteTbrubriqueConstatation(TbrubriqueConstatationDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -2186,7 +2262,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbrubriqueEstimation")]
         public async Task<IActionResult> InserTbrubriqueEstimation(TbrubriqueEstimationDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -2201,7 +2277,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbrubriqueEstimation")]
         public IActionResult MajTbrubriqueEstimation(TbrubriqueEstimationDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -2218,7 +2294,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbrubriqueEstimation")]
         public IActionResult DeleteTbrubriqueEstimation(TbrubriqueEstimationDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -2262,7 +2338,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbrubriqueEvaluation")]
         public async Task<IActionResult> InserTbrubriqueEvaluation(TbrubriqueEvaluationDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -2277,7 +2353,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbrubriqueEvaluation")]
         public IActionResult MajTbrubriqueEvaluation(TbrubriqueEvaluationDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -2294,7 +2370,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbrubriqueEvaluation")]
         public IActionResult DeleteTbrubriqueEvaluation(TbrubriqueEvaluationDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -2338,7 +2414,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbrubriqueHonoraire")]
         public async Task<IActionResult> InserTbrubriqueHonoraire(TbrubriqueHonoraireDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -2353,7 +2429,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbrubriqueHonoraire")]
         public IActionResult MajTbrubriqueHonoraire(TbrubriqueHonoraireDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -2370,7 +2446,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbrubriqueHonoraire")]
         public IActionResult DeleteTbrubriqueHonoraire(TbrubriqueHonoraireDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -2414,7 +2490,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbrubriqueMainOeuvre")]
         public async Task<IActionResult> InserTbrubriqueMainOeuvre(TbrubriqueMainOeuvreDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -2429,7 +2505,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbrubriqueMainOeuvre")]
         public IActionResult MajTbrubriqueMainOeuvre(TbrubriqueMainOeuvreDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -2446,7 +2522,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbrubriqueMainOeuvre")]
         public IActionResult DeleteTbrubriqueMainOeuvre(TbrubriqueMainOeuvreDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -2490,7 +2566,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbservice")]
         public async Task<IActionResult> InserTbservice(TbserviceDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -2505,7 +2581,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbservice")]
         public IActionResult MajTbservice(TbserviceDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -2522,11 +2598,163 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbservice")]
         public IActionResult DeleteTbservice(TbserviceDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
             return Ok(_service.DeleteTbservice(value));
+        }
+
+
+        #endregion
+
+        #region TbtarifHoraire
+        /// <summary>
+        /// Retourne Toutes les villes
+        /// </summary>
+        /// <param name="token">Token d'authentification</param>
+        /// <returns></returns>
+        [HttpGet("GetALLTbtarifHoraire")]
+        public IActionResult GetALLTbtarifHoraire(string token)
+        {
+
+            return Ok(_service.GetAllTbtarifHoraire(token));
+        }
+
+        /// <summary>
+        /// Retourne une ville par l'id
+        /// </summary>
+        /// <param name="id">Id de ville</param>
+        /// <param name="token">Token d'authentification</param>
+        /// <returns></returns>
+        [HttpGet("GetTbtarifHoraireUnique")]
+        public async Task<IActionResult> GetTbtarifHoraireUnique(decimal id, string token)
+        {
+
+            return Ok(await _service.GetTbtarifHoraire(id, token));
+        }
+
+        /// <summary>
+        /// Insertion de nouvelle ville
+        /// </summary>
+        /// <param name="value">Instance de ville à ajouter</param>
+        /// <returns></returns>
+        [HttpPost("InserTbtarifHoraire")]
+        public async Task<IActionResult> InserTbtarifHoraire(TbtarifHoraireDto value)
+        {
+            if (value == null)
+            {
+                return BadRequest();
+            }
+            return Ok(await _service.InsertTbtarifHoraire(value));
+        }
+
+        /// <summary>
+        /// Mise à jour de ville
+        /// </summary>
+        /// <param name="value">Instance de ville mise à jour</param>
+        /// <returns></returns>
+        [HttpPost("MajTbtarifHoraire")]
+        public IActionResult MajTbtarifHoraire(TbtarifHoraireDto value)
+        {
+            if (value == null)
+            {
+                return BadRequest();
+            }
+            return Ok(_service.MajTbtarifHoraire(value));
+        }
+
+
+
+        /// <summary>
+        /// Suppression de ville
+        /// </summary>
+        /// <param name="value">Instance de ville à supprimer</param>
+        /// <returns></returns>
+        [HttpPost("DeleteTbtarifHoraire")]
+        public IActionResult DeleteTbtarifHoraire(TbtarifHoraireDto value)
+        {
+            if (value == null)
+            {
+                return BadRequest();
+            }
+            return Ok(_service.DeleteTbtarifHoraire(value));
+        }
+
+
+        #endregion
+
+        #region Tbnote
+        /// <summary>
+        /// Retourne Toutes les villes
+        /// </summary>
+        /// <param name="token">Token d'authentification</param>
+        /// <returns></returns>
+        [HttpGet("GetALLTbnote")]
+        public IActionResult GetALLTbnote(string token)
+        {
+
+            return Ok(_service.GetAllTbnote(token));
+        }
+
+        /// <summary>
+        /// Retourne une ville par l'id
+        /// </summary>
+        /// <param name="id">Id de ville</param>
+        /// <param name="token">Token d'authentification</param>
+        /// <returns></returns>
+        [HttpGet("GetTbnoteUnique")]
+        public async Task<IActionResult> GetTbnoteUnique(decimal id, string token)
+        {
+
+            return Ok(await _service.GetTbnote(id, token));
+        }
+
+        /// <summary>
+        /// Insertion de nouvelle ville
+        /// </summary>
+        /// <param name="value">Instance de ville à ajouter</param>
+        /// <returns></returns>
+        [HttpPost("InserTbnote")]
+        public async Task<IActionResult> InserTbnote(TbnoteDto value)
+        {
+            if (value == null)
+            {
+                return BadRequest();
+            }
+            return Ok(await _service.InsertTbnote(value));
+        }
+
+        /// <summary>
+        /// Mise à jour de ville
+        /// </summary>
+        /// <param name="value">Instance de ville mise à jour</param>
+        /// <returns></returns>
+        [HttpPost("MajTbnote")]
+        public IActionResult MajTbnote(TbnoteDto value)
+        {
+            if (value == null)
+            {
+                return BadRequest();
+            }
+            return Ok(_service.MajTbnote(value));
+        }
+
+
+
+        /// <summary>
+        /// Suppression de ville
+        /// </summary>
+        /// <param name="value">Instance de ville à supprimer</param>
+        /// <returns></returns>
+        [HttpPost("DeleteTbnote")]
+        public IActionResult DeleteTbnote(TbnoteDto value)
+        {
+            if (value == null)
+            {
+                return BadRequest();
+            }
+            return Ok(_service.DeleteTbnote(value));
         }
 
 
@@ -2566,7 +2794,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("InserTbspecialite")]
         public async Task<IActionResult> InserTbspecialite(TbspecialiteDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -2581,7 +2809,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("MajTbspecialite")]
         public IActionResult MajTbspecialite(TbspecialiteDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }
@@ -2598,7 +2826,7 @@ namespace ApiExpertAuto.Controllers
         [HttpPost("DeleteTbspecialite")]
         public IActionResult DeleteTbspecialite(TbspecialiteDto value)
         {
-            if (value != null)
+            if (value == null)
             {
                 return BadRequest();
             }

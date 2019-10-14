@@ -75,7 +75,7 @@
                 <button type="reset" class="btn btn-danger" data-dismiss="modal">
                     Fermer
                 </button>
-                <button type="button" class="btn btn-success">
+                <button type="button" class="btn btn-success" id="btnsave">
                     <span class="glyphicon glyphicon-ok-sign"></span> Enregistrer
                 </button>
             </div>
@@ -94,6 +94,51 @@
 
             charger_tableau();
             //charger_donnees();
+
+
+
+            //insertion de type note
+            $("#btnsave").click(function () {
+
+                var Libtypenote = $("#Libtypnote").val();
+                if (Libtypenote) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/Config/InsertTypeNote",
+                        data: {"value": JSON.stringify(Libtypenote)},
+                        success: function (response) {
+                            if (response) {
+                                if (response.ok == true) {
+                                    debugger
+                                    swal({
+                                        type: "success",
+                                        title: "Enregistrement type note",
+                                        text: "Enregistrement effectué avec succès"
+                                    }).then(function () {
+                                        $("#Libtypnote").val("");
+                                        $("#addEdit").modal("hide");
+                                    });
+                                } else {
+                                    debugger
+                                    swal({
+                                        type: "error",
+                                        title: "Enregistrement Type Note",
+                                        texte: " Echec de l'opération : "+response.message
+                                    });
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    swal({
+                        type: "error",
+                        title: "Enregistrement Type Note",
+                        text: "Veuillez renseigner tous les champs svp"
+
+                    });
+                    $("input").focus();
+                }
+            });
 
         });
         //Chargement des données dans un datatable

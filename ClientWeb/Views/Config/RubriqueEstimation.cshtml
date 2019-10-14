@@ -28,11 +28,11 @@
                             <thead>
                                 <tr>
                                     <th>LIBELLE RUBRIQUE ESTIMATION</th>
-                                    <th>ACTION</th>
+                                    @*<th>ACTION</th>*@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                @*<tr>
                                     <td>Abidjan</td>
                                     <td>
                                         <button class="btn btn-primary btn-xs">
@@ -42,7 +42,7 @@
                                             <span class="glyphicon glyphicon-trash"></span>
                                         </button>
                                     </td>
-                                </tr>
+                                </tr>*@
                                 
                             </tbody>
                         </table>
@@ -74,7 +74,7 @@
                 <button type="reset" class="btn btn-danger" data-dismiss="modal">
                     Fermer
                 </button>
-                <button type="button" class="btn btn-success">
+                <button type="button" class="btn btn-success" id="btnsave">
                     <span class="glyphicon glyphicon-ok-sign"></span> Enregistrer
                 </button>
             </div>
@@ -89,108 +89,185 @@
     <script>
 
         $(document).ready(function () {
-            //debugger;
-
+            debugger;
             charger_tableau();
+            var oTable = $("#tbTypeTaxe").DataTable({
+
+                deferRender: true,
+                columnDefs: [{
+                    "data": "Libelle"
+                }],
+                data:[]
+
+            });
+        
             //charger_donnees();
+
+            //enregistrement de rubrique
+            $("#btnsave").click(function () {
+                debugger
+                var rubriquestimation = $("#LibRubEstim").val();
+                if (rubriquestimation) {
+                    debugger
+                    $.ajax({
+                        type: "GET",
+                        url: "/Config/AddRubriqueEstimation",
+                        data: { "value": JSON.stringify(rubriquestimation) },
+                        success: function (response) {
+                            if (response) {
+                                debugger
+                                if (response.ok == true) {
+                                    debugger
+                                    swal({
+                                        type: "success",
+                                        title: "Enregistrement nouvelle rubrique estimation",
+                                        text: "Enregistrement effectué avec succès"
+                                    }).then(function () {
+                                        
+                                            $("#LibRubEstim").val("");
+                                            $("#addEdit").modal("hide");
+                                       
+                                    });
+                                } 
+                            }
+                        }
+                    });
+                } else {
+                    swal({
+                        type: "error",
+                        title: "Enregistrement nouvelle rubrique estimation",
+                        text: "Veuillez renseigner tous les champs svp"
+                    }).then(function () {
+                        $("input").focus();
+                    });
+                }
+               
+
+
+
+
+
+
+            });
+
+
+            function charger_tableau() {
+
+
+                debugger
+                $.ajax({
+                    type: "GET",
+                    url: "/config/GetAllRubriqueEstimation",
+                    success: function (response) {
+                        if (response.ok == true) {
+                            debugger
+                            $.each(response.liste, function (n, i) {
+                                oTable.row.add([{
+                                    "Libelle": i.libRubEstim
+                                }]).draw();
+
+                            });
+                        }
+                    }
+                });
+
+                //    var oTable = $("#tbTypeTaxe").DataTable({
+                //        "ajax": {
+                //            "type": "GET",
+                //            "url": "/Configuration/GetAllTypeTaxe",
+                //            "datatype": "json"
+                //        },
+                //        "columns": [
+                //            { "data": "valueType" },
+                //            {
+                //                "data": "typeID", "render": function (data) {
+                //                    var id = JSON.stringify(data);
+                //                    return "<a class='btn btn-primary m - btn m - btn--pill m - btn--wide btn - sm' onclick='Editerow(" + id + ")' style='color:white'>Modifier</a> <a class='btn btn-danger m - btn m - btn--pill m - btn--wide btn - sm' onclick='DeleteRow(" + id + ")' style='color:white'>Suprimer</a>";
+                //                }
+                //            }
+                //        ],
+                //        data: [],
+                //        dom: 'Bfrtip',
+                //        buttons: [
+                //            //personalisation du bouton print
+                //            //'print',
+                //            {
+                //                extend: 'print',
+                //                title: 'Liste des  Type de Taxes',//Titre de la page
+                //                text: function (dt, button, config) {
+                //                    return dt.i18n('buttons.print', 'Imprimer');//Changer le titre du bouton
+                //                },
+                //                customize: function (win) {//Retirer les champs à ne pas afficher avant l'impression
+                //                    $(win.document.body).find('table thead th:nth-child(2)').css('display', 'none');
+                //                    $(win.document.body).find('table tbody td:nth-child(2)').css('display', 'none');
+
+                //                    //$(win.document.body).find('table thead th:nth-child(2)').css('display', 'none');
+                //                    //$(win.document.body).find('table tbody td:nth-child(2)').css('display', 'none');
+
+                //                    //$(win.document.body).find('table thead th:nth-child(8)').css('display', 'none');
+                //                    //$(win.document.body).find('table tbody td:nth-child(8)').css('display', 'none');
+                //                },
+                //            },
+
+                //            //personalisation du bouton excel
+                //            //'excel',
+                //            {
+                //                extend: 'excel',
+                //                title: 'Liste des  Type de Taxes',//Titre de la page
+                //                exportOptions: {
+                //                    columns: [0/*, 3, 4, 5, 6*/]//Affiche les colonnes selon son choix
+                //                },
+                //                text: function (dt, button, config) {
+                //                    return dt.i18n('buttons.excel', 'Excel');//Changer le titre du bouton
+                //                }
+
+                //            }
+                //        ],
+
+
+                //        language: {
+                //            processing: "Traitement en cours...",
+                //            search: "Rechercher&nbsp;:",
+                //            lengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
+                //            info: "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+                //            infoEmpty: "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+                //            infoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+                //            infoPostFix: "",
+                //            loadingRecords: "Chargement en cours...",
+                //            zeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
+                //            emptyTable: "Aucune donnée disponible dans le tableau",
+                //            paginate: {
+                //                first: "Premier",
+                //                previous: "Pr&eacute;c&eacute;dent",
+                //                next: "Suivant",
+                //                last: "Dernier"
+                //            },
+                //            aria: {
+                //                sortAscending: ": activer pour trier la colonne par ordre croissant",
+                //                sortDescending: ": activer pour trier la colonne par ordre décroissant"
+                //            }
+                //        },
+
+                //        drawCallback: function () {//Styliser le tableau
+                //            //$('table#mtable tbody tr td').css('padding', '0px 0px 0px 0px');
+                //            $('table#tbTypeTaxe tbody tr td').css('height', '15px');
+                //            $('table#tbTypeTaxe tbody td:nth-child(2)').css('text-align', 'right');
+
+                //            $('table#tbTypeTaxe thead td:nth-child(2)').css('width', '30%');
+                //            $('table#tbTypeTaxe tbody td:nth-child(2)').css('width', '30%');
+                //        },
+                //        rowCallback: function (row, data) { },
+                //        filter: true,
+                //        info: true,
+                //        ordering: false,
+                //        processing: false,
+                //        retrieve: true
+                //    });
+            }
 
         });
         //Chargement des données dans un datatable
-        function charger_tableau() {
-
-            var oTable = $("#tbTypeTaxe").DataTable({
-                "ajax": {
-                    "type": "GET",
-                    "url": "/Configuration/GetAllTypeTaxe",
-                    "datatype": "json"
-                },
-                "columns": [
-                    { "data": "valueType" },
-                    {
-                        "data": "typeID", "render": function (data) {
-                            var id = JSON.stringify(data);
-                            return "<a class='btn btn-primary m - btn m - btn--pill m - btn--wide btn - sm' onclick='Editerow(" + id + ")' style='color:white'>Modifier</a> <a class='btn btn-danger m - btn m - btn--pill m - btn--wide btn - sm' onclick='DeleteRow(" + id + ")' style='color:white'>Suprimer</a>";
-                        }
-                    }
-                ],
-                data: [],
-                dom: 'Bfrtip',
-                buttons: [
-                    //personalisation du bouton print
-                    //'print',
-                    {
-                        extend: 'print',
-                        title: 'Liste des  Type de Taxes',//Titre de la page
-                        text: function (dt, button, config) {
-                            return dt.i18n('buttons.print', 'Imprimer');//Changer le titre du bouton
-                        },
-                        customize: function (win) {//Retirer les champs à ne pas afficher avant l'impression
-                            $(win.document.body).find('table thead th:nth-child(2)').css('display', 'none');
-                            $(win.document.body).find('table tbody td:nth-child(2)').css('display', 'none');
-
-                            //$(win.document.body).find('table thead th:nth-child(2)').css('display', 'none');
-                            //$(win.document.body).find('table tbody td:nth-child(2)').css('display', 'none');
-
-                            //$(win.document.body).find('table thead th:nth-child(8)').css('display', 'none');
-                            //$(win.document.body).find('table tbody td:nth-child(8)').css('display', 'none');
-                        },
-                    },
-
-                    //personalisation du bouton excel
-                    //'excel',
-                    {
-                        extend: 'excel',
-                        title: 'Liste des  Type de Taxes',//Titre de la page
-                        exportOptions: {
-                            columns: [0/*, 3, 4, 5, 6*/]//Affiche les colonnes selon son choix
-                        },
-                        text: function (dt, button, config) {
-                            return dt.i18n('buttons.excel', 'Excel');//Changer le titre du bouton
-                        }
-
-                    }
-                ],
-
-
-                language: {
-                    processing: "Traitement en cours...",
-                    search: "Rechercher&nbsp;:",
-                    lengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
-                    info: "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
-                    infoEmpty: "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
-                    infoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
-                    infoPostFix: "",
-                    loadingRecords: "Chargement en cours...",
-                    zeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
-                    emptyTable: "Aucune donnée disponible dans le tableau",
-                    paginate: {
-                        first: "Premier",
-                        previous: "Pr&eacute;c&eacute;dent",
-                        next: "Suivant",
-                        last: "Dernier"
-                    },
-                    aria: {
-                        sortAscending: ": activer pour trier la colonne par ordre croissant",
-                        sortDescending: ": activer pour trier la colonne par ordre décroissant"
-                    }
-                },
-
-                drawCallback: function () {//Styliser le tableau
-                    //$('table#mtable tbody tr td').css('padding', '0px 0px 0px 0px');
-                    $('table#tbTypeTaxe tbody tr td').css('height', '15px');
-                    $('table#tbTypeTaxe tbody td:nth-child(2)').css('text-align', 'right');
-
-                    $('table#tbTypeTaxe thead td:nth-child(2)').css('width', '30%');
-                    $('table#tbTypeTaxe tbody td:nth-child(2)').css('width', '30%');
-                },
-                rowCallback: function (row, data) { },
-                filter: true,
-                info: true,
-                ordering: false,
-                processing: false,
-                retrieve: true
-            });
-        }
+       
 
 
         function addview() {

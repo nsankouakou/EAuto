@@ -7,22 +7,24 @@ namespace Entities.Enumeration
     public class Enumeration
     {
        
-        public enum StatutCodeDemande
+        public enum StatutCodeDOssier
         {
 
-            DonneesClienteles = 1,
-            Metre = 2,
-            EnAttenteDePaiement = 3,
-            CompteRendu = 4,
-            DemandeComplete = 5,
+            Ouverture = 1,
+            Expertise = 2,
+            Cloturer = 3,
+            ReOuverture = 4,
             AucunStatus = 0
 
         }
+
         public enum enumEtat
         {
             Non_Valide = 0,
             Valide = 1
         }
+
+        
 
         public enum enumTypeDonnees
         {
@@ -102,8 +104,12 @@ namespace Entities.Enumeration
 
         public enum StatutCode
         {
-            Actif = 1,
-            Inactif = 0
+            Initialtion = 0,
+            Creation = 1,
+            Modifier = 2,
+            Suppression_En_cours = 3,
+            Supprimer = 4,
+            InfoParDefaut = 5
         };
 
         public enum StateCode

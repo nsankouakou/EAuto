@@ -25,19 +25,19 @@ namespace Entities.Models.Dtos
         public string Token { get; set; }
 
 
-        public ICollection<TbexpertiseFourniturePointChoc> TbexpertiseFourniturePointChoc { get; set; }
+        //public ICollection<TbexpertiseFourniturePointChoc> TbexpertiseFourniturePointChoc { get; set; }
 
-        public ICollection<TbexpertisePointChoc> TbexpertisePointChoc { get; set; }
+        //public ICollection<TbexpertisePointChoc> TbexpertisePointChoc { get; set; }
 
-        public ICollection<TbexpertisePourRecousPointChoc> TbexpertisePourRecousPointChoc { get; set; }
+        //public ICollection<TbexpertisePourRecousPointChoc> TbexpertisePourRecousPointChoc { get; set; }
 
-        public ICollection<TbexpertiseRubriqueConstatationPointChoc> TbexpertiseRubriqueConstatationPointChoc { get; set; }
+        //public ICollection<TbexpertiseRubriqueConstatationPointChoc> TbexpertiseRubriqueConstatationPointChoc { get; set; }
 
-        public ICollection<TbexpertiseTravauxExterieurPointChoc> TbexpertiseTravauxExterieurPointChoc { get; set; }
+        //public ICollection<TbexpertiseTravauxExterieurPointChoc> TbexpertiseTravauxExterieurPointChoc { get; set; }
 
-        public ICollection<TbmainOeuvrePointChoc> TbmainOeuvrePointChoc { get; set; }
+        //public ICollection<TbmainOeuvrePointChoc> TbmainOeuvrePointChoc { get; set; }
 
-        public ICollection<TbrecapPrejudice> TbrecapPrejudice { get; set; }
+        //public ICollection<TbrecapPrejudice> TbrecapPrejudice { get; set; }
 
         public static TbpointChocDto FromModel(TbpointChoc model)
         {
@@ -51,13 +51,13 @@ namespace Entities.Models.Dtos
                 ModifiePar = model.ModifiePar, 
                 StateCode = model.StateCode, 
                 StatusCode = model.StatusCode, 
-                TbexpertiseFourniturePointChoc = model.TbexpertiseFourniturePointChoc, 
-                TbexpertisePointChoc = model.TbexpertisePointChoc, 
-                TbexpertisePourRecousPointChoc = model.TbexpertisePourRecousPointChoc, 
-                TbexpertiseRubriqueConstatationPointChoc = model.TbexpertiseRubriqueConstatationPointChoc, 
-                TbexpertiseTravauxExterieurPointChoc = model.TbexpertiseTravauxExterieurPointChoc, 
-                TbmainOeuvrePointChoc = model.TbmainOeuvrePointChoc, 
-                TbrecapPrejudice = model.TbrecapPrejudice, 
+                //TbexpertiseFourniturePointChoc = model.TbexpertiseFourniturePointChoc, 
+                //TbexpertisePointChoc = model.TbexpertisePointChoc, 
+                //TbexpertisePourRecousPointChoc = model.TbexpertisePourRecousPointChoc, 
+                //TbexpertiseRubriqueConstatationPointChoc = model.TbexpertiseRubriqueConstatationPointChoc, 
+                //TbexpertiseTravauxExterieurPointChoc = model.TbexpertiseTravauxExterieurPointChoc, 
+                //TbmainOeuvrePointChoc = model.TbmainOeuvrePointChoc, 
+                //TbrecapPrejudice = model.TbrecapPrejudice, 
             }; 
         }
 
@@ -73,13 +73,13 @@ namespace Entities.Models.Dtos
                 ModifiePar = ModifiePar, 
                 StateCode = StateCode, 
                 StatusCode = StatusCode, 
-                TbexpertiseFourniturePointChoc = TbexpertiseFourniturePointChoc, 
-                TbexpertisePointChoc = TbexpertisePointChoc, 
-                TbexpertisePourRecousPointChoc = TbexpertisePourRecousPointChoc, 
-                TbexpertiseRubriqueConstatationPointChoc = TbexpertiseRubriqueConstatationPointChoc, 
-                TbexpertiseTravauxExterieurPointChoc = TbexpertiseTravauxExterieurPointChoc, 
-                TbmainOeuvrePointChoc = TbmainOeuvrePointChoc, 
-                TbrecapPrejudice = TbrecapPrejudice, 
+                //TbexpertiseFourniturePointChoc = TbexpertiseFourniturePointChoc, 
+                //TbexpertisePointChoc = TbexpertisePointChoc, 
+                //TbexpertisePourRecousPointChoc = TbexpertisePourRecousPointChoc, 
+                //TbexpertiseRubriqueConstatationPointChoc = TbexpertiseRubriqueConstatationPointChoc, 
+                //TbexpertiseTravauxExterieurPointChoc = TbexpertiseTravauxExterieurPointChoc, 
+                //TbmainOeuvrePointChoc = TbmainOeuvrePointChoc, 
+                //TbrecapPrejudice = TbrecapPrejudice, 
             }; 
         }
     }

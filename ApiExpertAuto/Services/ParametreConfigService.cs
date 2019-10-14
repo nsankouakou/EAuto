@@ -3198,6 +3198,409 @@ namespace ApiExpertAuto.Services
 
         #endregion
 
+        #region Tbnote
+
+        public async Task<ObjetRetour> GetChargAllTbnote(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+
+                    var datas = await _service.Tbnote.FindByConditionAync(m => m.StateCode == (int)StateCode.Actif);
+                    retour.Contenu = datas.Select(d => new ObjetParamModel { Id = d.IdNot, ValueType = d.LibelleNot });
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public ObjetRetour GetAllTbnote(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    var datas = _service.Tbnote.FindAll().ToList();
+
+                    var lstTbnoteDtos = new List<TbnoteDto>();
+
+                    foreach (var item in datas)
+                    {
+                        lstTbnoteDtos.Add(TbnoteDto.FromModel(item));
+                    }
+                    retour.Contenu = lstTbnoteDtos;
+
+
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT Tbnote");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public async Task<ObjetRetour> GetTbnote(decimal id, string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    retour.Contenu = await _service.Tbnote.FindByConditionAync(a => a.IdNot == id);
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT Tbnote");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+
+            return retour;
+        }
+
+        public async Task<ObjetRetour> InsertTbnote(TbnoteDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    await _service.Tbnote.CreateAsync(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS INSERTION Tbnote :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return retour;
+        }
+
+        public ObjetRetour MajTbnote(TbnoteDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    var data = _service.Tbnote.FindByCondition(v => v.IdNot == value.IdNot).FirstOrDefault();
+                    data.IdNot = value.IdNot;
+                    data.LibelleNot = value.LibelleNot;
+                    data.Idtypnote = value.Idtypnote;
+                    data.IdUser = value.IdUser;
+                    data.ModifieLe = value.ModifieLe;
+                    data.ModifiePar = value.ModifiePar;
+                    data.StateCode = value.StateCode;
+                    data.StatusCode = value.StatusCode;
+
+                    _service.Tbnote.Update(data);
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS UPDATE Tbnote :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        public ObjetRetour DeleteTbnote(TbnoteDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    _service.Tbnote.Delete(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SUPPRESSION Tbnote :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        #endregion
+
+
+        #region TbtarifHoraire
+
+        public async Task<ObjetRetour> GetChargAllTbtarifHoraire(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+
+                    var datas = await _service.TbtarifHoraire.FindByConditionAync(m => m.StateCode == (int)StateCode.Actif);
+                    retour.Contenu = datas.Select(d => new ObjetParamModel { Id = d.IdTarifHor, Code = d.MtTarifHor });
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public ObjetRetour GetAllTbtarifHoraire(string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    var datas = _service.TbtarifHoraire.FindAll().ToList();
+
+                    var lstTbtarifHoraireDtos = new List<TbtarifHoraireDto>();
+
+                    foreach (var item in datas)
+                    {
+                        lstTbtarifHoraireDtos.Add(TbtarifHoraireDto.FromModel(item));
+                    }
+                    retour.Contenu = lstTbtarifHoraireDtos;
+
+
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT TbtarifHoraire");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+
+        }
+
+        public async Task<ObjetRetour> GetTbtarifHoraire(decimal id, string token = "")
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+
+                if (_commun.ConnexionValide(token) == (int)enumEtat.Valide)
+                {
+                    retour.Contenu = await _service.TbtarifHoraire.FindByConditionAync(a => a.IdTarifHor == id);
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SELECT TbtarifHoraire");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+
+            return retour;
+        }
+
+        public async Task<ObjetRetour> InsertTbtarifHoraire(TbtarifHoraireDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    await _service.TbtarifHoraire.CreateAsync(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS INSERTION TbtarifHoraire :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                retour.Etat = false;
+                retour.Message = ex.Message;
+                _logger.LogError(ex.Message);
+            }
+            return retour;
+        }
+
+        public ObjetRetour MajTbtarifHoraire(TbtarifHoraireDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    var data = _service.TbtarifHoraire.FindByCondition(v => v.IdTarifHor == value.IdTarifHor).FirstOrDefault();
+                    data.IdTarifHor = value.IdTarifHor;
+                    data.MtTarifHor = value.MtTarifHor; data.
+                IdUser = value.IdUser; data.
+               ModifieLe = value.ModifieLe; data.
+               ModifiePar = value.ModifiePar; data.
+               StateCode = value.StateCode; data.
+               StatusCode = value.StatusCode;
+
+                    _service.TbtarifHoraire.Update(data);
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS UPDATE TbtarifHoraire :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        public ObjetRetour DeleteTbtarifHoraire(TbtarifHoraireDto value)
+        {
+            var retour = new ObjetRetour();
+            try
+            {
+                if (_commun.ConnexionValide(value?.Token) == (int)enumEtat.Valide)
+                {
+                    _service.TbtarifHoraire.Delete(value.ToModel());
+                    _service.Save();
+                    retour.Etat = true;
+                    _logger.LogInfo($"SUCCESS SUPPRESSION TbtarifHoraire :\n  {value.ToString()}");
+                }
+                else
+                {
+                    retour.Message = $"Token non valide!";
+                    retour.Etat = false;
+                    _logger.LogInfo($"Token non valide!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                retour.Etat = false;
+                retour.Message = ex.Message;
+            }
+
+            return retour;
+        }
+
+        #endregion
+
+
         #region Tbspecialite
 
         public async Task<ObjetRetour> GetChargAllTbspecialite(string token = "")

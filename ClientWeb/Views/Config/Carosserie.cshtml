@@ -21,15 +21,16 @@
                 </div>
                 <div class="panel-body">
                     <div class="table-responsive">
-                        <table class="table table-striped table-bordered table-hover" id="tbCarosserie">
+                        <table class="table table-striped table-bordered table-hove" id="tbCarosserie">
                             <thead>
                                 <tr>
-                                    <th>LIBELLE</th>
-                                    <th>ACTION</th>
+                                    <th>ID</th>
+                                    @*<th>LIBELLE</th>
+                                    <th>ACTION</th>*@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                @*<tr>
                                     <td>Roman Runolfsdottir</td>
                                     <td>
                                         <button class="btn btn-primary btn-xs">
@@ -39,7 +40,7 @@
                                             <span class="glyphicon glyphicon-trash"></span>
                                         </button>
                                     </td>
-                                </tr>
+                                </tr>*@
                             </tbody>
                         </table>
                     </div>
@@ -61,14 +62,14 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <input class="form-control disabled" type="text" placeholder="Libellé Carosserie">
+                            <input class="form-control disabled" type="text" placeholder="Libellé Carosserie" id="Libcarosserie">
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer ">
                 <button type="reset" class="btn btn-danger" data-dismiss="modal">Fermer</button>
-                <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-ok-sign"></span> Enregistrer</button>
+                <button type="button" class="btn btn-success" id="btnEnregistrer"><span class="glyphicon glyphicon-ok-sign"></span> Enregistrer</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -82,63 +83,139 @@
 
         $(document).ready(function () {
             //debugger;
-        
-            charger_tableau();
-            //charger_donnees();
-
-        });
-        //Chargement des données dans un datatable
-        function charger_tableau() {
-
-            var oTable = $("#tbCarosserie").DataTable({
-                "ajax": {
-                    "type": "GET",
-                    "url": "/Configuration/GetAllCarosserie",
-                    "datatype": "json"
-                },
-                "columns": [
-                    { "data": "valueType" },
+            var table = $("#tbCarosserie").DataTable({
+                deferRender: true,
+                columns: [
                     {
-                        "data": "typeID", "render": function (data) {
-                            var id = JSON.stringify(data);
-                            return "<a class='btn btn-primary m - btn m - btn--pill m - btn--wide btn - sm' onclick='Editerow(" + id + ")' style='color:white'><span class='glyphicon glyphicon-pencil'></span></a> <a class='btn btn-danger m - btn m - btn--pill m - btn--wide btn - sm' onclick='DeleteRow(" + id + ")' style='color:white'><span class='glyphicon glyphicon-trash'></span></a>";
-                        }
-                    }
+                        "data": "LibCarross"
+                       
+                    },
+
                 ],
                 data: [],
-                dom: 'Bfrtip',
-
-                language: {
-                    processing: "Traitement en cours...",
-                    search: "Rechercher&nbsp;:",
-                    lengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
-                    info: "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
-                    infoEmpty: "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
-                    infoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
-                    infoPostFix: "",
-                    loadingRecords: "Chargement en cours...",
-                    zeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
-                    emptyTable: "Aucune donnée disponible dans le tableau",
-                    paginate: {
-                        first: "Premier",
-                        previous: "Pr&eacute;c&eacute;dent",
-                        next: "Suivant",
-                        last: "Dernier"
-                    },
-                    aria: {
-                        sortAscending: ": activer pour trier la colonne par ordre croissant",
-                        sortDescending: ": activer pour trier la colonne par ordre décroissant"
-                    }
-                },
-                
-                rowCallback: function (row, data) { },
-                filter: true,
-                info: true,
-                ordering: false,
-                processing: false,
-                retrieve: true
+                ordering: false               // rowCallback: function (row, data) { },
+                //processing: true,
+                //retrieve: true
             });
-        }
+           
+                     
+            charger_tableau();
+            function charger_tableau() {
+
+                debugger
+                $.ajax({
+                    type: "GET",
+                    url: "/Config/GetAllCarosserie",
+                    success: function (data) {
+                        debugger
+                        if (data) {
+                            $.each(data, function (i, val) {
+                                table.rows.add([{
+                                    "LibCarross":JSON.stringify(val.LibCarross)
+                                }]).draw();
+                            })
+                        }
+                    }
+
+                });
+
+
+
+
+
+
+                //var oTable = $("#tbCarosserie").DataTable({
+                //    "ajax": {
+                //        "type": "GET",
+                //        "url": "/Configuration/GetAllCarosserie",
+                //        "datatype": "json"
+                //    },
+                //    "columns": [
+                //        { "data": "valueType" },
+                //        {
+                //            "data": "typeID", "render": function (data) {
+                //                var id = JSON.stringify(data);
+                //                return "<a class='btn btn-primary m - btn m - btn--pill m - btn--wide btn - sm' onclick='Editerow(" + id + ")' style='color:white'><span class='glyphicon glyphicon-pencil'></span></a> <a class='btn btn-danger m - btn m - btn--pill m - btn--wide btn - sm' onclick='DeleteRow(" + id + ")' style='color:white'><span class='glyphicon glyphicon-trash'></span></a>";
+                //            }
+                //        }
+                //    ],
+                //    data: [],
+                //    dom: 'Bfrtip',
+
+                //    language: {
+                //        processing: "Traitement en cours...",
+                //        search: "Rechercher&nbsp;:",
+                //        lengthMenu: "Afficher _MENU_ &eacute;l&eacute;ments",
+                //        info: "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+                //        infoEmpty: "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+                //        infoFiltered: "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+                //        infoPostFix: "",
+                //        loadingRecords: "Chargement en cours...",
+                //        zeroRecords: "Aucun &eacute;l&eacute;ment &agrave; afficher",
+                //        emptyTable: "Aucune donnée disponible dans le tableau",
+                //        paginate: {
+                //            first: "Premier",
+                //            previous: "Pr&eacute;c&eacute;dent",
+                //            next: "Suivant",
+                //            last: "Dernier"
+                //        },
+                //        aria: {
+                //            sortAscending: ": activer pour trier la colonne par ordre croissant",
+                //            sortDescending: ": activer pour trier la colonne par ordre décroissant"
+                //        }
+                //    },
+
+                //    rowCallback: function (row, data) { },
+                //    filter: true,
+                //    info: true,
+                //    ordering: false,
+                //    processing: false,
+                //    retrieve: true
+                //});
+            }
+            $("#btnEnregistrer").click(function () {
+
+                var libelleCarosserie = $("#Libcarosserie").val();
+                if (libelleCarosserie) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/Config/AddCarosserie",
+                        data: { "value": JSON.stringify(libelleCarosserie) },
+                        success: function (response) {
+                            debugger
+                            if (response) {
+                                if (response.ok == true) {
+                                    swal({
+                                        title: "Enregistrement carosserie",
+                                        text: "Enregistrement effectué avec succès",
+                                        type: "success"
+                                    }).then(function () {
+                                        $("#Libcarosserie").val("");
+                                        $("#addEdit").modal('hide');
+                                        });
+                                }
+                                else {
+                                    swal({
+                                        title: "Enregistrement carosserie",
+                                        text: "Echec de l'opération: "+response.message,
+                                        type:"error"
+                                    });
+                                }
+                            } else {
+
+                            }
+                        }
+                        
+                    });
+                } else {
+                    alert("veuillez remplir les champs svp");
+                }
+
+            });
+
+        });
+ 
+      
 
 
         function addview() {

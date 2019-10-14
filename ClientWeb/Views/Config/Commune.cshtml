@@ -63,17 +63,17 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <input class="form-control disabled" type="text" placeholder="Nom Commune">
+                            <input class="form-control disabled" type="text" placeholder="Nom Commune" id="nomville">
                         </div>
                     </div>
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <input class="form-control disabled" type="text" placeholder="Déplacement">
+                            <input class="form-control disabled" type="text" placeholder="Déplacement" id="deplacement">
                         </div>
                     </div>
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <select id="skill" name="skill" class="form-control">
+                            <select id="ville" name="skill" class="form-control">
                                 <option value="">
                                     Ville
                                 </option>
@@ -85,7 +85,7 @@
             </div>
             <div class="modal-footer ">
                 <button type="reset" class="btn btn-danger" data-dismiss="modal">Fermer</button>
-                <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-ok-sign"></span> Enregistrer</button>
+                <button type="button" class="btn btn-success" id="btnEnregistrer"><span class="glyphicon glyphicon-ok-sign"></span> Enregistrer</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -99,10 +99,134 @@
 
         $(document).ready(function () {
             //debugger;
-        
+            GetListeVille();
             charger_tableau();
             //charger_donnees();
+           function GetListeVille() {
+                $.ajax({
+                    type: "GET",
+                    url: "/Config/GetAllVille",
+                    success: function (response) {
+                        debugger
+                        console.log(response.liste);
+                        $("#ville").empty();
+                        var line = "<option>sélectionner une ville</option>";
+                        $("#ville").append(line);
+                        $.each(response.liste, function (n,i) {
+                           var line1 = "<option value='" + i.idVille + "'>'" + i.nomVille + "'</option>";
+                           $("#ville").append(line1);
 
+                        });
+                    }
+                });
+            }
+
+
+            //save une commune
+            $("#btnsave").click(function () {
+                debugger
+                alert("hello");
+                @*commune = {
+                    "nomComm": "",
+                    "deplacement": "",
+                    "idVille": ""
+                };
+
+                commune.nomComm = $("#nomville").val();
+                commune.deplacement = $("#deplacement").val();
+                commune.idVille = $("#ville").val();
+
+                if (commune) {
+                    $.ajax({
+                        type:"GET",
+                        url: '@Url.Action("Config", "AddCommune")',
+                        data: { "value": JSON.stringify(commune) },
+                        success: function (response) {
+                            if (response) {
+                                if (response.ok == true) {
+                                    swal({
+                                        type: "succès",
+                                        title: "Enregistrement Commune",
+                                        text: "Enregistrement effectué avec succès"
+                                    }).then(function () {
+                                        $("#nomville").empty();
+                                        $("#deplacement").empty();
+                                        $("#addEdit").modal('hide');
+                                    });
+                                } else {
+                                    swal({
+                                        type: "error",
+                                        title: "Enregistrement Commune",
+                                        text:"Echec de l'opération: "+response.message
+
+                                    });
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    swal({
+                        type: "error",
+                        title: "Enregistrement Commune",
+                        text:" Veuillez remplir tous les champs svp"
+                    });
+                }*@
+            });
+
+
+
+
+        });
+
+
+
+        $("#btnEnregistrer").click(function () {
+            debugger
+             commune = {
+                "nomComm": "",
+                    "deplacement": "",
+                        "idVille": ""
+            };
+
+            commune.nomComm = $("#nomville").val();
+            commune.deplacement = $("#deplacement").val();
+            commune.idVille = $("#ville").val();
+
+            if (commune) {
+                $.ajax({
+                    type: "GET",
+                    url: "/Config/AddCommune",
+                    data: { "value": JSON.stringify(commune) },
+                    success: function (response) {
+                        if (response) {
+                            if (response.ok == true) {
+                                swal({
+                                    type: "succès",
+                                    title: "Enregistrement Commune",
+                                    text: "Enregistrement effectué avec succès"
+                                }).then(function () {
+                                    $("#nomville").empty();
+                                    $("#deplacement").empty();
+                                    $("#addEdit").modal('hide');
+                                });
+                            } else {
+                                swal({
+                                    type: "error",
+                                    title: "Enregistrement Commune",
+                                    text: "Echec de l'opération: " + response.message
+
+                                });
+                            }
+                        }
+                    }
+                });
+            } else {
+                swal({
+                    type: "error",
+                    title: "Enregistrement Commune",
+                    text: " Veuillez remplir tous les champs svp"
+                });
+            }
         });
         //Chargement des données dans un datatable
         function charger_tableau() {
@@ -200,8 +324,6 @@
                 retrieve: true
             });
         }
-
-
         function addview() {
             $("#m_modal_4").modal('show');
             $("#Editer").hide();//cache/affiche le Titre du modal

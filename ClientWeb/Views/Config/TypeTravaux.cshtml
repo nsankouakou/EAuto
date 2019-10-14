@@ -19,31 +19,31 @@
                         Liste des Types Utilisateurs
                     </h3>
                     <div class="pull-right">
-                        <button type="button" class="btn btn-success btn-sm" onclick="addview()" data-toggle="modal" data-target="#addEdit" data-placement="top"><i class="glyphicon glyphicon-plus"></i>  Ajouter</button>
+                        <button type="button" class="btn btn-success btn-sm" onclick="addview()" data-toggle="modal" data-placement="top"><i class="glyphicon glyphicon-plus"></i>  Ajouter</button>
                     </div>
                 </div>
                 <div class="panel-body">
                     <div class="table-responsive">
-                        <table class="table table-striped table-bordered table-hover" id="sample_1">
+                        <table class="table table-striped table-bordered table-hover" id="tbTypeTravaux">
                             <thead>
                                 <tr>
-                                    <th>LIBELLE TYPE TRAVAUX</th>
+                                    <th>TYPE TRAVAUX</th>
                                     <th>ACTION</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Abidjan</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-xs">
-                                            <span class="glyphicon glyphicon-pencil"></span>
-                                        </button>
-                                        <button class="btn btn-danger btn-xs" onclick="DeleteRow(2)">
-                                            <span class="glyphicon glyphicon-trash"></span>
-                                        </button>
-                                    </td>
-                                </tr>
-                                
+                                @*<tr>
+                                        <td>Abidjan</td>
+                                        <td>
+                                            <button class="btn btn-primary btn-xs">
+                                                <span class="glyphicon glyphicon-pencil"></span>
+                                            </button>
+                                            <button class="btn btn-danger btn-xs" onclick="DeleteRow(2)">
+                                                <span class="glyphicon glyphicon-trash"></span>
+                                            </button>
+                                        </td>
+                                    </tr>*@
+
                             </tbody>
                         </table>
                     </div>
@@ -54,30 +54,31 @@
 </section>
 <!-- /.content -->
 <!-- start modal -->
-<div class="modal fade" id="addEdit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="m_modal_4" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title custom_align" id="Heading">Nouveau Type Travaux</h4>
+                <h4 class="modal-title custom_align" id="Nouveau">Nouveau Type Travaux</h4>
+                <h4 class="modal-title custom_align" id="Editer">Editer Type Travaux</h4>
             </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <input class="form-control " type="text" placeholder="Libellé Type Travaux" id="Libtyptrav">
+            <form>
+                <input type="text" id="idGt" class="form-control" value="">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input class="form-control " type="text" placeholder="Libellé Type Travaux" id="Libelle">
+                            </div>
+
                         </div>
-                        
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer ">
-                <button type="reset" class="btn btn-danger" data-dismiss="modal">
-                    Fermer
-                </button>
-                <button type="button" class="btn btn-success">
-                    <span class="glyphicon glyphicon-ok-sign"></span> Enregistrer
-                </button>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-success" id="submitdata" onclick="btnsubmit()"><span class="glyphicon glyphicon-ok-sign"></span>Enregistrer</button>
+                <button type="button" class="btn btn-success" id="updaterecord" onclick="Updatesubmit()"><span class="glyphicon glyphicon-ok-sign"></span>Modifier</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -93,65 +94,27 @@
             //debugger;
 
             charger_tableau();
-            //charger_donnees();
-
         });
         //Chargement des données dans un datatable
         function charger_tableau() {
 
-            var oTable = $("#tbTypeTaxe").DataTable({
+            var oTable = $("#tbTypeTravaux").DataTable({
                 "ajax": {
                     "type": "GET",
-                    "url": "/Configuration/GetAllTypeTaxe",
+                    "url": "/Config/GetAllTypeTravaux",
                     "datatype": "json"
                 },
                 "columns": [
-                    { "data": "valueType" },
+                    { "data": "libtyptrav" },
                     {
-                        "data": "typeID", "render": function (data) {
+                        "data": "idtyptrav", "render": function (data) {
                             var id = JSON.stringify(data);
-                            return "<a class='btn btn-primary m - btn m - btn--pill m - btn--wide btn - sm' onclick='Editerow(" + id + ")' style='color:white'>Modifier</a> <a class='btn btn-danger m - btn m - btn--pill m - btn--wide btn - sm' onclick='DeleteRow(" + id + ")' style='color:white'>Suprimer</a>";
+                            return "<button class='btn btn-primary btn-xs' onclick='Editerow(" + id + ")'><span class='glyphicon glyphicon-pencil'></span></button> <button class='btn btn-danger btn-xs' onclick='DeleteRow(" + id + ")'><span class='glyphicon glyphicon-trash'></span></button>";
                         }
                     }
                 ],
                 data: [],
                 dom: 'Bfrtip',
-                buttons: [
-                    //personalisation du bouton print
-                    //'print',
-                    {
-                        extend: 'print',
-                        title: 'Liste des  Type de Taxes',//Titre de la page
-                        text: function (dt, button, config) {
-                            return dt.i18n('buttons.print', 'Imprimer');//Changer le titre du bouton
-                        },
-                        customize: function (win) {//Retirer les champs à ne pas afficher avant l'impression
-                            $(win.document.body).find('table thead th:nth-child(2)').css('display', 'none');
-                            $(win.document.body).find('table tbody td:nth-child(2)').css('display', 'none');
-
-                            //$(win.document.body).find('table thead th:nth-child(2)').css('display', 'none');
-                            //$(win.document.body).find('table tbody td:nth-child(2)').css('display', 'none');
-
-                            //$(win.document.body).find('table thead th:nth-child(8)').css('display', 'none');
-                            //$(win.document.body).find('table tbody td:nth-child(8)').css('display', 'none');
-                        },
-                    },
-
-                    //personalisation du bouton excel
-                    //'excel',
-                    {
-                        extend: 'excel',
-                        title: 'Liste des  Type de Taxes',//Titre de la page
-                        exportOptions: {
-                            columns: [0/*, 3, 4, 5, 6*/]//Affiche les colonnes selon son choix
-                        },
-                        text: function (dt, button, config) {
-                            return dt.i18n('buttons.excel', 'Excel');//Changer le titre du bouton
-                        }
-
-                    }
-                ],
-
 
                 language: {
                     processing: "Traitement en cours...",
@@ -176,13 +139,9 @@
                     }
                 },
 
-                drawCallback: function () {//Styliser le tableau
-                    //$('table#mtable tbody tr td').css('padding', '0px 0px 0px 0px');
-                    $('table#tbTypeTaxe tbody tr td').css('height', '15px');
-                    $('table#tbTypeTaxe tbody td:nth-child(2)').css('text-align', 'right');
-
-                    $('table#tbTypeTaxe thead td:nth-child(2)').css('width', '30%');
-                    $('table#tbTypeTaxe tbody td:nth-child(2)').css('width', '30%');
+                drawCallback: function () {
+                    $('table#tbTypeTravaux thead td:nth-child(2)').css('width', '20%');
+                    $('table#tbTypeTravaux tbody td:nth-child(2)').css('width', '20%');
                 },
                 rowCallback: function (row, data) { },
                 filter: true,
@@ -192,7 +151,6 @@
                 retrieve: true
             });
         }
-
 
         function addview() {
             $("#m_modal_4").modal('show');
@@ -230,153 +188,153 @@
     @*========================FONCTION TOUS LES EVENNEMENTS============================*@
     <script>
 
-     //fonction pour ajouter un element construit par objet
-    function btnsubmit() {
-        //debugger;
-        var table = $("#tbTypeTaxe").DataTable();
+         //fonction pour ajouter un element construit par objet
+        function btnsubmit() {
+            //debugger;
+            var table = $("#tbTypeTravaux").DataTable();
 
-        //Creation de l'objet JSON
-        var operation = {
-            //TypeTaxeId: 0,
-            Libelle: $("#libelle").val()
-        };
+            //Creation de l'objet JSON
+            var operation = {
+                //Idtyptrav: 0,
+                Libtyptrav: $("#Libelle").val()
+            };
 
-        $.ajax({
-            type: 'POST',
-            url: '@Url.Action("AddTypeTaxe", "Configuration")',
-            data: { jsonObject: JSON.stringify(operation) },
-            dataType: "json",
-            success: function (data) {
-                if (data.ok == true) {
-                    swal("Succès", data.message, "success");
-
-                    $("#m_modal_4").modal('hide');//ferme le modal
-                    table.destroy();//destruction du tableau
-                    charger_tableau();//affichage du nouveau tableau
-                    viderForm();//vider les champs du formulaire
-                } else {
-                    swal("Attention", data.message , "error");
-                    }
-            },
-            error: function (msg) {
-
-                swal("Ooups!!!", "code erreur 404 ", "error");
-
-            }
-
-        });
-    }
-
-
-
-    //fonction qui remplit le modal des infos à modifier
-    function Editerow(id) {
-        //alert(id);
-        //Creation de l'objet JSON
-        var operation = {
-            TypeTaxeId: id
-        };
-
-        $.ajax({
-            type: 'GET',
-            url: '@Url.Action("GetTypeTaxe", "Configuration")',
-            data: { jsonObject: JSON.stringify(operation) },
-            datatype: 'JSON',
-            success: function (data) {
-
-                for (var i = 0; i < data.length; i++) {
-                    $("#idGt").val(data[i].typeTaxeId);
-                    $("#libelle").val(data[i].libelle);
-                }
-
-                //etat du formulaire
-                editview();
-            },
-            error: function (msg) {
-                alert(msg.responseText);
-            }
-        });
-    }
-
-    //fonction pour enregistrer les modifications
-    function Updatesubmit() {
-        //debugger;
-        var table = $("#tbTypeTaxe").DataTable();
-
-        //Creation de l'objet JSON
-        var operation = {
-           TypeTaxeId:  $("#idGt").val(),
-            Libelle: $("#libelle").val()
-        };
-
-        $.ajax({
-            type: 'PUT',
-            url: '@Url.Action("UpdateTypeTaxe", "Configuration")',
-            data: { jsonObject: JSON.stringify(operation) },
-            dataType: "json",
-            success: function (data) {
-                if (data.ok == true) {
-                    swal("Succès", data.message, "success");
-
-                    $("#m_modal_4").modal('hide');//ferme le modal
-                    table.destroy();//destruction du tableau
-                    charger_tableau();//affichage du nouveau tableau
-                    viderForm();//vider les champs du formulaire
-                } else {
-                        swal("Attention", "Un ou plusieurs champs sont vide ", "error");
-                    }
-            },
-            error: function (msg) {
-
-                swal("Ooups!!!", "code erreur 404 ", "error");
-
-            }
-
-        });
-    }
-
-
-    function DeleteRow(id) {
-        var table = $("#tbTypeTaxe").DataTable();
-
-        //Creation de l'objet JSON
-        var operation = {
-            TypeTaxeId: id
-        };
-
-        swal({
-            title: 'Attention!',
-            text: "Voulez vous supprimer cet élement ?",
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#22D69D',
-            cancelButtonColor: '#FB8678',
-            confirmButtonText: 'Oui, supprimer!',
-            cancelButtonText: 'Non, Merci!',
-            confirmButtonClass: 'btn btn-success',
-            cancelButtonClass: 'btn btn-danger'
-        }).then(function () {
             $.ajax({
-                type: 'PUT',
-                url: '@Url.Action("DeleteTypeTaxe", "Configuration")',
+                type: 'POST',
+                url: '@Url.Action("AddTypeTravaux", "Config")',
                 data: { jsonObject: JSON.stringify(operation) },
                 dataType: "json",
                 success: function (data) {
                     if (data.ok == true) {
                         swal("Succès", data.message, "success");
 
-                        table.destroy();
-                        charger_tableau();
+                        $("#m_modal_4").modal('hide');//ferme le modal
+                        table.destroy();//destruction du tableau
+                        charger_tableau();//affichage du nouveau tableau
+                        viderForm();//vider les champs du formulaire
                     } else {
-                            swal("Attention", "Le sevice est inaccessible", "error");
+                        swal("Attention", data.message , "error");
                         }
                 },
-                error: function () {
+                error: function (msg) {
+
                     swal("Ooups!!!", "code erreur 404 ", "error");
+
+                }
+
+            });
+        }
+
+
+
+        //fonction qui remplit le modal des infos à modifier
+        function Editerow(Id) {
+            //alert(id);
+            //Creation de l'objet JSON
+
+            var operation = {
+                id: Id
+            };
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetTypeTravaux", "Config")',
+                data: { jsonObject: JSON.stringify(operation) },
+                datatype: 'JSON',
+                success: function (data) {
+
+                    for (var i = 0; i < data.length; i++) {
+                        $("#idGt").val(data[i].idtyptrav);
+                        $("#Libelle").val(data[i].libtyptrav);
+                    }
+                    //etat du formulaire
+                    editview();
+                },
+                error: function (msg) {
+                    alert(msg.responseText);
                 }
             });
-        });
+        }
 
-    }
+        //fonction pour enregistrer les modifications
+        function Updatesubmit() {
+            //debugger;
+            var table = $("#tbTypeTravaux").DataTable();
+
+            //Creation de l'objet JSON
+            var operation = {
+                Idtyptrav: $("#idGt").val(),
+                Libtyptrav: $("#Libelle").val()
+            };
+
+            $.ajax({
+                type: 'PUT',
+                url: '@Url.Action("UpdateTypeTravaux", "Config")',
+                data: { jsonObject: JSON.stringify(operation) },
+                dataType: "json",
+                success: function (data) {
+                    if (data.ok == true) {
+                        swal("Succès", data.message, "success");
+
+                        $("#m_modal_4").modal('hide');//ferme le modal
+                        table.destroy();//destruction du tableau
+                        charger_tableau();//affichage du nouveau tableau
+                        viderForm();//vider les champs du formulaire
+                    } else {
+                            swal("Attention", "Un ou plusieurs champs sont vide ", "error");
+                        }
+                },
+                error: function (msg) {
+
+                    swal("Ooups!!!", "code erreur 404 ", "error");
+
+                }
+
+            });
+        }
+
+
+        function DeleteRow(id) {
+            var table = $("#tbTypeTravaux").DataTable();
+
+            //Creation de l'objet JSON
+            var operation = {
+                Idtyptrav: id
+            };
+
+            swal({
+                title: 'Attention!',
+                text: "Voulez vous supprimer cet élement ?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#22D69D',
+                cancelButtonColor: '#FB8678',
+                confirmButtonText: 'Oui, supprimer!',
+                cancelButtonText: 'Non, Merci!',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger'
+            }).then(function () {
+                $.ajax({
+                    type: 'PUT',
+                    url: '@Url.Action("DeleteTypeTravaux", "Config")',
+                    data: { jsonObject: JSON.stringify(operation) },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.ok == true) {
+                            swal("Succès", data.message, "success");
+
+                            table.destroy();
+                            charger_tableau();
+                        } else {
+                                swal("Attention", "Le sevice est inaccessible", "error");
+                            }
+                    },
+                    error: function () {
+                        swal("Ooups!!!", "code erreur 404 ", "error");
+                    }
+                });
+            });
+
+        }
     </script>
 }

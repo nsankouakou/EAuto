@@ -16,7 +16,7 @@
                 <div class="panel-heading clearfix">
                     <h3 class="panel-title pull-left m-t-6">Liste des Fournitures</h3>
                     <div class="pull-right">
-                        <button type="button" class="btn btn-success btn-sm" onclick="addview()" data-toggle="modal" data-target="#addEdit" data-placement="top"><i class="glyphicon glyphicon-plus"></i>  Ajouter</button>
+                        <button type="button" class="btn btn-success btn-sm" onclick="addview()" data-toggle="modal" data-placement="top"><i class="glyphicon glyphicon-plus"></i>  Ajouter</button>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -29,17 +29,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Roman Runolfsdottir</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-xs">
-                                            <span class="glyphicon glyphicon-pencil"></span>
-                                        </button>
-                                        <button class="btn btn-danger btn-xs" onclick="DeleteRow(2)">
-                                            <span class="glyphicon glyphicon-trash"></span>
-                                        </button>
-                                    </td>
-                                </tr>
+                                @*<tr>
+                                        <td>Roman Runolfsdottir</td>
+                                        <td>
+                                            <button class="btn btn-primary btn-xs">
+                                                <span class="glyphicon glyphicon-pencil"></span>
+                                            </button>
+                                            <button class="btn btn-danger btn-xs" onclick="DeleteRow(2)">
+                                                <span class="glyphicon glyphicon-trash"></span>
+                                            </button>
+                                        </td>
+                                    </tr>*@
                             </tbody>
                         </table>
                     </div>
@@ -50,25 +50,30 @@
 </section>
 <!-- /.content -->
 <!-- start modal -->
-<div class="modal fade" id="addEdit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+<div class="modal fade" id="m_modal_4" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title custom_align" id="Heading">Ajout de Fourniture</h4>
+                <h4 class="modal-title custom_align" id="Nouveau">Ajout de Fourniture</h4>
+                <h4 class="modal-title custom_align" id="Editer">Editer Fourniture</h4>
             </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <input class="form-control disabled" type="text" placeholder="Libellé Fourniture">
+            <form>
+                <input type="text" id="idGt" class="form-control" value="">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input class="form-control" id="Libelle" type="text" placeholder="Libellé Fourniture">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer ">
-                <button type="reset" class="btn btn-danger" data-dismiss="modal">Fermer</button>
-                <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-ok-sign"></span> Enregistrer</button>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-success" id="submitdata" onclick="btnsubmit()"><span class="glyphicon glyphicon-ok-sign"></span>Enregistrer</button>
+                <button type="button" class="btn btn-success" id="updaterecord" onclick="Updatesubmit()"><span class="glyphicon glyphicon-ok-sign"></span>Modifier</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -82,10 +87,8 @@
 
         $(document).ready(function () {
             //debugger;
-        
-            charger_tableau();
-            //charger_donnees();
 
+            charger_tableau();
         });
         //Chargement des données dans un datatable
         function charger_tableau() {
@@ -93,15 +96,15 @@
             var oTable = $("#tbFourniture").DataTable({
                 "ajax": {
                     "type": "GET",
-                    "url": "/Configuration/GetAllFourniture",
+                    "url": "/Config/GetAllFourniture",
                     "datatype": "json"
                 },
                 "columns": [
-                    { "data": "valueType" },
+                    { "data": "libFourn" },
                     {
-                        "data": "typeID", "render": function (data) {
+                        "data": "idFourn", "render": function (data) {
                             var id = JSON.stringify(data);
-                            return "<a class='btn btn-primary m - btn m - btn--pill m - btn--wide btn - sm' onclick='Editerow(" + id + ")' style='color:white'><span class='glyphicon glyphicon-pencil'></span></a> <a class='btn btn-danger m - btn m - btn--pill m - btn--wide btn - sm' onclick='DeleteRow(" + id + ")' style='color:white'><span class='glyphicon glyphicon-trash'></span></a>";
+                            return "<button class='btn btn-primary btn-xs' onclick='Editerow(" + id + ")'><span class='glyphicon glyphicon-pencil'></span></button> <button class='btn btn-danger btn-xs' onclick='DeleteRow(" + id + ")'><span class='glyphicon glyphicon-trash'></span></button>";
                         }
                     }
                 ],
@@ -130,7 +133,11 @@
                         sortDescending: ": activer pour trier la colonne par ordre décroissant"
                     }
                 },
-                
+
+                drawCallback: function () {
+                    $('table#tbFourniture thead td:nth-child(2)').css('width', '20%');
+                    $('table#tbFourniture tbody td:nth-child(2)').css('width', '20%');
+                },
                 rowCallback: function (row, data) { },
                 filter: true,
                 info: true,
@@ -139,7 +146,6 @@
                 retrieve: true
             });
         }
-
 
         function addview() {
             $("#m_modal_4").modal('show');
@@ -177,153 +183,153 @@
     @*========================FONCTION TOUS LES EVENNEMENTS============================*@
     <script>
 
-     //fonction pour ajouter un element construit par objet
-    function btnsubmit() {
-        //debugger;
-        var table = $("#tbFourniture").DataTable();
+         //fonction pour ajouter un element construit par objet
+        function btnsubmit() {
+            //debugger;
+            var table = $("#tbFourniture").DataTable();
 
-        //Creation de l'objet JSON
-        var operation = {
-            //FournitureId: 0,
-            Libelle: $("#libelle").val()
-        };
+            //Creation de l'objet JSON
+            var operation = {
+                //IdFourn: 0,
+                LibFourn: $("#Libelle").val()
+            };
 
-        $.ajax({
-            type: 'POST',
-            url: '@Url.Action("AddFourniture", "Configuration")',
-            data: { jsonObject: JSON.stringify(operation) },
-            dataType: "json",
-            success: function (data) {
-                if (data.ok == true) {
-                    swal("Succès", data.message, "success");
-
-                    $("#m_modal_4").modal('hide');//ferme le modal
-                    table.destroy();//destruction du tableau
-                    charger_tableau();//affichage du nouveau tableau
-                    viderForm();//vider les champs du formulaire
-                } else {
-                    swal("Attention", data.message , "error");
-                    }
-            },
-            error: function (msg) {
-
-                swal("Ooups!!!", "code erreur 404 ", "error");
-
-            }
-
-        });
-    }
-
-
-
-    //fonction qui remplit le modal des infos à modifier
-    function Editerow(id) {
-        //alert(id);
-        //Creation de l'objet JSON
-        var operation = {
-            FournitureId: id
-        };
-
-        $.ajax({
-            type: 'GET',
-            url: '@Url.Action("GetFourniture", "Configuration")',
-            data: { jsonObject: JSON.stringify(operation) },
-            datatype: 'JSON',
-            success: function (data) {
-
-                for (var i = 0; i < data.length; i++) {
-                    $("#idGt").val(data[i].FournitureId);
-                    $("#libelle").val(data[i].libelle);
-                }
-
-                //etat du formulaire
-                editview();
-            },
-            error: function (msg) {
-                alert(msg.responseText);
-            }
-        });
-    }
-
-    //fonction pour enregistrer les modifications
-    function Updatesubmit() {
-        //debugger;
-        var table = $("#tbFourniture").DataTable();
-
-        //Creation de l'objet JSON
-        var operation = {
-           FournitureId:  $("#idGt").val(),
-            Libelle: $("#libelle").val()
-        };
-
-        $.ajax({
-            type: 'PUT',
-            url: '@Url.Action("UpdateFourniture", "Configuration")',
-            data: { jsonObject: JSON.stringify(operation) },
-            dataType: "json",
-            success: function (data) {
-                if (data.ok == true) {
-                    swal("Succès", data.message, "success");
-
-                    $("#m_modal_4").modal('hide');//ferme le modal
-                    table.destroy();//destruction du tableau
-                    charger_tableau();//affichage du nouveau tableau
-                    viderForm();//vider les champs du formulaire
-                } else {
-                        swal("Attention", "Un ou plusieurs champs sont vide ", "error");
-                    }
-            },
-            error: function (msg) {
-
-                swal("Ooups!!!", "code erreur 404 ", "error");
-
-            }
-
-        });
-    }
-
-
-    function DeleteRow(id) {
-        var table = $("#tbFourniture").DataTable();
-
-        //Creation de l'objet JSON
-        var operation = {
-            FournitureId: id
-        };
-
-        swal({
-            title: 'Attention!',
-            text: "Voulez vous supprimer cet élement ?",
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#22D69D',
-            cancelButtonColor: '#FB8678',
-            confirmButtonText: 'Oui, supprimer!',
-            cancelButtonText: 'Non, Merci!',
-            confirmButtonClass: 'btn btn-success',
-            cancelButtonClass: 'btn btn-danger'
-        }).then(function () {
             $.ajax({
-                type: 'PUT',
-                url: '@Url.Action("DeleteFourniture", "Configuration")',
+                type: 'POST',
+                url: '@Url.Action("AddFourniture", "Config")',
                 data: { jsonObject: JSON.stringify(operation) },
                 dataType: "json",
                 success: function (data) {
                     if (data.ok == true) {
                         swal("Succès", data.message, "success");
 
-                        table.destroy();
-                        charger_tableau();
+                        $("#m_modal_4").modal('hide');//ferme le modal
+                        table.destroy();//destruction du tableau
+                        charger_tableau();//affichage du nouveau tableau
+                        viderForm();//vider les champs du formulaire
                     } else {
-                            swal("Attention", "Le sevice est inaccessible", "error");
+                        swal("Attention", data.message , "error");
                         }
                 },
-                error: function () {
+                error: function (msg) {
+
                     swal("Ooups!!!", "code erreur 404 ", "error");
+
+                }
+
+            });
+        }
+
+
+
+        //fonction qui remplit le modal des infos à modifier
+        function Editerow(Id) {
+            //alert(id);
+            //Creation de l'objet JSON
+
+            var operation = {
+                id: Id
+            };
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetFourniture", "Config")',
+                data: { jsonObject: JSON.stringify(operation) },
+                datatype: 'JSON',
+                success: function (data) {
+
+                    for (var i = 0; i < data.length; i++) {
+                        $("#idGt").val(data[i].idFourn);
+                        $("#Libelle").val(data[i].libFourn);
+                    }
+                    //etat du formulaire
+                    editview();
+                },
+                error: function (msg) {
+                    alert(msg.responseText);
                 }
             });
-        });
+        }
 
-    }
+        //fonction pour enregistrer les modifications
+        function Updatesubmit() {
+            //debugger;
+            var table = $("#tbFourniture").DataTable();
+
+            //Creation de l'objet JSON
+            var operation = {
+                IdFourn: $("#idGt").val(),
+                LibFourn: $("#Libelle").val()
+            };
+
+            $.ajax({
+                type: 'PUT',
+                url: '@Url.Action("UpdateFourniture", "Config")',
+                data: { jsonObject: JSON.stringify(operation) },
+                dataType: "json",
+                success: function (data) {
+                    if (data.ok == true) {
+                        swal("Succès", data.message, "success");
+
+                        $("#m_modal_4").modal('hide');//ferme le modal
+                        table.destroy();//destruction du tableau
+                        charger_tableau();//affichage du nouveau tableau
+                        viderForm();//vider les champs du formulaire
+                    } else {
+                            swal("Attention", "Un ou plusieurs champs sont vide ", "error");
+                        }
+                },
+                error: function (msg) {
+
+                    swal("Ooups!!!", "code erreur 404 ", "error");
+
+                }
+
+            });
+        }
+
+
+        function DeleteRow(id) {
+            var table = $("#tbFourniture").DataTable();
+
+            //Creation de l'objet JSON
+            var operation = {
+                IdFourn: id
+            };
+
+            swal({
+                title: 'Attention!',
+                text: "Voulez vous supprimer cet élement ?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#22D69D',
+                cancelButtonColor: '#FB8678',
+                confirmButtonText: 'Oui, supprimer!',
+                cancelButtonText: 'Non, Merci!',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger'
+            }).then(function () {
+                $.ajax({
+                    type: 'PUT',
+                    url: '@Url.Action("DeleteFourniture", "Config")',
+                    data: { jsonObject: JSON.stringify(operation) },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.ok == true) {
+                            swal("Succès", data.message, "success");
+
+                            table.destroy();
+                            charger_tableau();
+                        } else {
+                                swal("Attention", "Le sevice est inaccessible", "error");
+                            }
+                    },
+                    error: function () {
+                        swal("Ooups!!!", "code erreur 404 ", "error");
+                    }
+                });
+            });
+
+        }
     </script>
 }

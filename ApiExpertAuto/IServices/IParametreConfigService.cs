@@ -634,6 +634,38 @@ namespace ApiExpertAuto.IServices
 
         #endregion
 
+        #region TbtarifHoraire
+
+        Task<ObjetRetour> GetChargAllTbtarifHoraire(string token = "");
+
+        ObjetRetour GetAllTbtarifHoraire(string token = "");
+
+        Task<ObjetRetour> GetTbtarifHoraire(decimal id, string token = "");
+
+        Task<ObjetRetour> InsertTbtarifHoraire(TbtarifHoraireDto value);
+
+        ObjetRetour MajTbtarifHoraire(TbtarifHoraireDto value);
+
+        ObjetRetour DeleteTbtarifHoraire(TbtarifHoraireDto value);
+
+        #endregion
+
+        #region Tbnote
+
+        Task<ObjetRetour> GetChargAllTbnote(string token = "");
+
+        ObjetRetour GetAllTbnote(string token = "");
+
+        Task<ObjetRetour> GetTbnote(decimal id, string token = "");
+
+        Task<ObjetRetour> InsertTbnote(TbnoteDto value);
+
+        ObjetRetour MajTbnote(TbnoteDto value);
+
+        ObjetRetour DeleteTbnote(TbnoteDto value);
+
+        #endregion
+
 
 
     }
