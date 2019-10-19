@@ -88,7 +88,11 @@ namespace ApiExpertAuto.Models
 
         public List<TbrubriqueConstatationDto> RubriqueConstatations { get; set; }
 
+        public List<TbexpertiseRubriqueConstatationPointChocDto> TbexpertiseRubriqueConstatationPointChocDto { get; set; }
+
         public List<TbrubriqueEvaluationDto> RubriqueEvaluations { get; set; }
+
+        public List<TbrubriqueEvalExpertiseDto> rubriqueEvalExpertises { get; set; }
 
         public string Token { get; set; }
     }

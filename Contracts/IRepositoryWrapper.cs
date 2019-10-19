@@ -16,8 +16,17 @@ namespace Contracts
 
         ITbassuranceRepository Tbassurance { get; }
 
+        IConnexionRepository Connexion { get; }
+
+        IEquipementRepository Equipement { get; }
 
         ITbagentRepository Tbagent { get; }
+
+        ITbmenuRepository Tbmenu { get; }
+
+        ITbhabilitationRepository Tbhabilitation { get; }
+
+        ITbprofilRepository Tbprofil { get; }
 
         ITbcarosserieRepository Tbcarosserie { get; }
 

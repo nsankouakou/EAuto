@@ -86,6 +86,81 @@ namespace Repository
             }
         }
 
+        private IEquipementRepository _Equipement;
+
+        public IEquipementRepository Equipement
+        {
+            get
+            {
+                if (_Equipement == null)
+                {
+                    _Equipement = new EquipementRepository(_repoContext);
+                }
+
+                return _Equipement;
+            }
+        }
+
+        private ITbmenuRepository _Tbmenu;
+
+        public ITbmenuRepository Tbmenu
+        {
+            get
+            {
+                if (_Tbmenu == null)
+                {
+                    _Tbmenu = new TbmenuRepository(_repoContext);
+                }
+
+                return _Tbmenu;
+            }
+        }
+
+        private ITbhabilitationRepository _Tbhabilitation;
+
+        public ITbhabilitationRepository Tbhabilitation
+        {
+            get
+            {
+                if (_Tbhabilitation == null)
+                {
+                    _Tbhabilitation = new TbhabilitationRepository(_repoContext);
+                }
+
+                return _Tbhabilitation;
+            }
+        }
+
+        private ITbprofilRepository _Tbprofil;
+
+        public ITbprofilRepository Tbprofil
+        {
+            get
+            {
+                if (_Tbprofil == null)
+                {
+                    _Tbprofil = new TbprofilRepository(_repoContext);
+                }
+
+                return _Tbprofil;
+            }
+        }
+
+        private IConnexionRepository _Connexion;
+
+        public IConnexionRepository Connexion
+        {
+            get
+            {
+                if (_Connexion == null)
+                {
+                    _Connexion = new ConnexionRepository(_repoContext);
+                }
+
+                return _Connexion;
+            }
+        }
+
 
         private ITbautreRubriqueRepository _TbautreRubrique;
 

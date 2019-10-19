@@ -62,6 +62,8 @@ namespace Entities.Models.Dtos
 
         public DateTime? DateCreation { get; set; }
 
+        public string Matricule { get; set; }
+
         public string Token { get; set; }
 
 

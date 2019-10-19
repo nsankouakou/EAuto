@@ -13,7 +13,7 @@ namespace ClientWeb
             {
                // string currentModule = moduleName;
                 HttpClient client = new HttpClient();
-                client.BaseAddress = new Uri(Startup.ModuleServiceConfig);
+                client.BaseAddress = new Uri(Startup.ApiWebBase);
                 return client;
             }
             catch (Exception ex)

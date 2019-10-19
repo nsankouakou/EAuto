@@ -3540,12 +3540,12 @@ namespace ApiExpertAuto.Services
                 {
                     var data = _service.TbtarifHoraire.FindByCondition(v => v.IdTarifHor == value.IdTarifHor).FirstOrDefault();
                     data.IdTarifHor = value.IdTarifHor;
-                    data.MtTarifHor = value.MtTarifHor; data.
-                IdUser = value.IdUser; data.
-               ModifieLe = value.ModifieLe; data.
-               ModifiePar = value.ModifiePar; data.
-               StateCode = value.StateCode; data.
-               StatusCode = value.StatusCode;
+                    data.MtTarifHor = value.MtTarifHor;
+                    data.IdUser = value.IdUser;
+                    data.ModifieLe = value.ModifieLe;
+                    data.ModifiePar = value.ModifiePar;
+                    data.StateCode = value.StateCode;
+                    data.StatusCode = value.StatusCode;
 
                     _service.TbtarifHoraire.Update(data);
                     _service.Save();

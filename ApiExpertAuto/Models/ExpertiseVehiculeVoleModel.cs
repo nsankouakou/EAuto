@@ -86,7 +86,9 @@ namespace ApiExpertAuto.Models
 
         public int? StatusCode { get; set; }
 
-        public List<decimal> PointChocs { get; set; }
+        public List<TbexpertisePointChocDto> ExpertisePointChocs { get; set; }
+
+        public List<TbpointChocDto> PointChocs { get; set; }
 
         public string Token { get; set; }
     }

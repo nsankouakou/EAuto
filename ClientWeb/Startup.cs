@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ClientWeb.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -16,10 +17,11 @@ namespace ClientWeb
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            //ModuleServiceConfig = Configuration.GetSection("ApiServiceBase").GetSection("Url").Value;
         }
 
         public IConfiguration Configuration { get; }
-        public static string ModuleServiceConfig = "";
+        public static string ApiWebBase = "";
         public static string TraitementService = "";
         public static int InactivityTimeBeforeReloading;
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -32,6 +34,7 @@ namespace ClientWeb
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddTransient<IConfigurationService, ConfigurationService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -40,8 +43,8 @@ namespace ClientWeb
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
 
-            ModuleServiceConfig = Configuration.GetSection("ApiServiceConfiguration").GetValue<string>("Url");
-            TraitementService = Configuration.GetSection("ApiServiceEtatCivil").GetValue<string>("Url");
+            ApiWebBase = Configuration.GetSection("ApiServiceBase").GetValue<string>("Url");
+            //TraitementService = Configuration.GetSection("ApiServiceEtatCivil").GetValue<string>("Url");
             //
             InactivityTimeBeforeReloading = Configuration.GetSection("InactivityTimeBeforeReloading").GetValue<int>("Time");
             if (env.IsDevelopment())

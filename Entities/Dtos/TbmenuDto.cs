@@ -8,7 +8,7 @@ namespace Entities.Models.Dtos
     {
         public decimal MenuId { get; set; }
 
-        public Guid? IdParent { get; set; }
+        public decimal? IdParent { get; set; }
 
         public string LibelleMenu { get; set; }
 

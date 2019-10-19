@@ -7,6 +7,7 @@ namespace Entities.Models
     {
         public int ConnexionId { get; set; }
         public int UserId { get; set; }
+        public decimal Equipementid { get; set; }
         public string AdresseIpSource { get; set; }
         public DateTime DateConnexion { get; set; }
         public DateTime? DateLastConnexion { get; set; }

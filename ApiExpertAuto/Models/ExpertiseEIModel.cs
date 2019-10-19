@@ -1,4 +1,5 @@
-﻿using Entities.Models.Dtos;
+﻿using Entities.Models;
+using Entities.Models.Dtos;
 using System;
 using System.Collections.Generic;
 
@@ -84,8 +85,104 @@ namespace ApiExpertAuto.Models
 
         public int? StatusCode { get; set; }
 
-        public List<TbexpertisePointChocDto> PointChocs { get; set; }
+        public List<TbexpertisePointChocDto> ExpertisePointChocs { get; set; }
+
+        public List<TbpointChocDto> PointChocs { get; set; }
 
         public string Token { get; set; }
+
+        public static TbexpertiseDto FromModel(Tbexpertise model)
+        {
+            return new TbexpertiseDto()
+            {
+                IdExpert = model.IdExpert,
+                NumExpert = model.NumExpert,
+                Kilometrage = model.Kilometrage,
+                VuAvT = model.VuAvT,
+                VuPdtT = model.VuPdtT,
+                VuApT = model.VuApT,
+                Duree = model.Duree,
+                LieuVisite = model.LieuVisite,
+                ValeurNeuve = model.ValeurNeuve,
+                Depreciation = model.Depreciation,
+                ValeurVenale = model.ValeurVenale,
+                Avd = model.Avd,
+                Avgp = model.Avgp,
+                Ard = model.Ard,
+                Arg = model.Arg,
+                Indep = model.Indep,
+                Reseau = model.Reseau,
+                Hreseau = model.Hreseau,
+                EuxMeme = model.EuxMeme,
+                Inconnu = model.Inconnu,
+                NonProf = model.NonProf,
+                IdVeh = model.IdVeh,
+                IdGara = model.IdGara,
+                IdEtatEntretien = model.IdEtatEntretien,
+                IdDoss = model.IdDoss,
+                Idtypnote = model.Idtypnote,
+                DatEnreg = model.DatEnreg,
+                HeurEnreg = model.HeurEnreg,
+                Typnote = model.Typnote,
+                Numero = model.Numero,
+                IdUser = model.IdUser,
+                Epave = model.Epave,
+                ValeurSauvetage = model.ValeurSauvetage,
+                EconoIrrep = model.EconoIrrep,
+                DateCreation = model.DateCreation,
+                ModifieLe = model.ModifieLe,
+                ModifiePar = model.ModifiePar,
+                StateCode = model.StateCode,
+                StatusCode = model.StatusCode
+            };
+        }
+
+        public Tbexpertise ToModel()
+        {
+            return new Tbexpertise()
+            {
+                IdExpert = IdExpert,
+                NumExpert = NumExpert,
+                Kilometrage = Kilometrage,
+                VuAvT = VuAvT,
+                VuPdtT = VuPdtT,
+                VuApT = VuApT,
+                Duree = Duree,
+                LieuVisite = LieuVisite,
+                ValeurNeuve = ValeurNeuve,
+                Depreciation = Depreciation,
+                ValeurVenale = ValeurVenale,
+                Avd = Avd,
+                Avgp = Avgp,
+                Ard = Ard,
+                Arg = Arg,
+                Indep = Indep,
+                Reseau = Reseau,
+                Hreseau = Hreseau,
+                EuxMeme = EuxMeme,
+                Inconnu = Inconnu,
+                NonProf = NonProf,
+                IdVeh = IdVeh,
+                IdGara = IdGara,
+                IdEtatEntretien = IdEtatEntretien,
+                IdDoss = IdDoss,
+                Idtypnote = Idtypnote,
+                DatEnreg = DatEnreg,
+                HeurEnreg = HeurEnreg,
+                Typnote = Typnote,
+                Numero = Numero,
+                IdUser = IdUser,
+                Epave = Epave,
+                ValeurSauvetage = ValeurSauvetage,
+                EconoIrrep = EconoIrrep,
+                DateCreation = DateCreation,
+                ModifieLe = ModifieLe,
+                ModifiePar = ModifiePar,
+                StateCode = StateCode,
+                StatusCode = StatusCode
+
+            };
+        }
+
     }
 }
